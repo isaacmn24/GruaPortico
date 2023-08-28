@@ -9,15 +9,23 @@ diccionario = {0:rojo, 1:verde, 2:azul}
 
 matriz=[]
 
+eliminar=0
+
 pygame.init()
 
+# Tamaño de Pantalla
 pantalla_X = 900
 pantalla_Y = 600
 
-Circulo_X = 90
-Circulo_Y = 50
-Objetivo_X = 1
-Objetivo_Y = 1
+# Ubicación y tamaño de círculo
+Circulo_X = 60
+Circulo_Y = 300
+Objetivo_X = -1
+Objetivo_Y = 3
+
+# Espaciado matriz
+eje_x = 210
+eje_y = 50
 
 Par_ordenado = 0
 
@@ -79,26 +87,37 @@ while True:
 
 				matriz.append([Objetivo_X, Objetivo_Y, color]) # Meto sus datos en lista
 
-				Circulo_X = 90 # Coloco el nuevo
-				Circulo_Y = 50
+				Circulo_X = 55 # Coloco el nuevo
+				Circulo_Y = 300
 
-				Objetivo_X = 1
-				Objetivo_Y = 1
+				Objetivo_X = -1
+				Objetivo_Y = 3
 
 				color = random.randint(0,2)
+
+				if event.key == pygame.K_e: # Si aprieto TAB
+
+					eliminar=1
+					del matriz[1][1]
 
 
 	ventana.fill((255,255,255)) # Fondo blanco
 
 
 	# Matriz
-	for i in range (4):
-		pygame.draw.line(ventana, rojo, (900*(i+1)/5, 0), ((500*(i+1)/5, 900))) # verticales
-		pygame.draw.line(ventana, rojo, (0, 900*(i+1)/5), ((500, 900*(i+1)/5))) # horizontales
+	for i in range (6):
+		pygame.draw.line(ventana, rojo, [eje_x+(100*(i)),eje_y], [eje_x+(100*(i)),eje_y+500],4) # verticales
+		pygame.draw.line(ventana, rojo, [eje_x,eje_y+(100*i)], [eje_x+500,eje_y+(100*i)],4) # horizontales
 
-	########################
-	Destino_X = 2*Objetivo_X*(500/10)-(500/10) # Expresion matemática para moverse entre centros (no pregunten como la saqué)
-	Destino_Y = 2*Objetivo_Y*(900/10)-(900/10)
+	# Cuadro de carga
+	pygame.draw.line(ventana, rojo, [10,250], [10, 350],4)
+	pygame.draw.line(ventana, rojo, [110,250], [110, 350],4)
+	pygame.draw.line(ventana, rojo, [10,250], [110,250],4)
+	pygame.draw.line(ventana, rojo, [10,350], [110,350],4)
+
+	# ########################
+	Destino_X = (Objetivo_X*100)+(160) # Expresion matemática para moverse entre centros (no pregunten como la saqué)
+	Destino_Y = (Objetivo_Y*100)
 	########################		
 
 	############ MOVIMIENTO HORIZONTAL
@@ -118,11 +137,7 @@ while True:
 	pygame.draw.circle(ventana, diccionario[color], (Circulo_X, Circulo_Y), 30) # Dibujar circulo actual
 
 	for i in range (len(matriz)): # Recorrer la matriz dibujando los circulos previos
-		pygame.draw.circle(ventana,diccionario[matriz[i][2]], (2*matriz[i][0]*(pantalla_X/10)-(pantalla_X/10), 2*matriz[i][1]*(pantalla_Y/10)-(pantalla_Y/10)), 30)
-
-
-
+		pygame.draw.circle(ventana,diccionario[matriz[i][2]], (((matriz[i][0]*100)+(160)),((matriz[i][1]*100))), 30)
 
 	pygame.display.flip() # Refrescar pantalla
 	reloj.tick(60) # FPS
-
