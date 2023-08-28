@@ -95,10 +95,10 @@ while True:
 
 				color = random.randint(0,2)
 
-				if event.key == pygame.K_e: # Si aprieto TAB
+				# if event.key == pygame.K_e: # Si aprieto TAB
 
-					eliminar=1
-					del matriz[1][1]
+				# 	eliminar=1
+				# 	del matriz[1][1]
 
 
 	ventana.fill((255,255,255)) # Fondo blanco
