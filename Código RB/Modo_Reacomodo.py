@@ -1,6 +1,8 @@
 #Codigo de reacomodo
 #Para el funcionamiento correcto se debe mantener el mismo orden de la grid_espacial
 
+import lectura_csv
+
 #array para la posición de los colores escaneados en la matriz espacial
 Color_Rojo = []
 Color_Azul = []
@@ -24,6 +26,7 @@ grid_espacial = [[[0,0], [1,0], [2,0], [3,0], [4,0]],
                  [[0,3], [1,3], [2,3], [3,3], [4,3]],
                  [[0,4], [1,4], [2,4], [3,4], [4,4]]]
 
+
 #Colores:
 #Rojo = 1
 #Azul = 2
@@ -32,11 +35,13 @@ grid_espacial = [[[0,0], [1,0], [2,0], [3,0], [4,0]],
 
 
 #Archivo excel donde viene la posición de los objetos correctamente
-matriz_correcta = [[1, 2, 3, 1, 3],
-                   [2, 1, 1, 2, 2],
-                   [1, 2, 3, 2, 3],
-                   [1, 2, 3, 1, 2],
-                   [3, 2, 3, 1, 3]]
+
+matriz_correcta = [[0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0]]
+
 # 8 color rojo
 # 9 color azul
 # 8 color amarillo
@@ -46,15 +51,45 @@ matriz_correcta = [[1, 2, 3, 1, 3],
 matriz_escaneada = [[3, 2, 1, 1, 3],
                     [2, 1, 1, 3, 1],
                     [1, 1, 3, 2, 3],
-                    [1, 2, 3, 2, 4],
+                    [1, 2, 3, 2, 2],
                     [2, 2, 2, 3, 3]]
+
 # 8 color rojo
 # 8 color azul
 # 8 color amarillo
 # 1 color blanco
 
+# lectura de csv y asignación de posiciones y tipo
+grid_master=[]
+grid_master=lectura_csv.lectura_csv()
+# Recorre la grid una por una para obtener los datos y entonces hacer el 
+# recorrido según cordenadas estraidas de vectores
+for columna in range(len(grid_master[0])):
+    for fila in range(len(grid_master)):
+        posicion=grid_master[fila][columna]
+        grid_espacial[fila][columna]=[int(posicion[0]), int(posicion[1])]
+        # se almacena vector de cada espacio en matriz
 
-#Orden ascendente de la posicion en la matriz para los distintos objetos de la matriz con los objetos ordenados correctamente
+for fila in range(len(grid_master[0])):
+    print("matriz:", grid_espacial[fila])
+
+
+#Almacenamiento en matri correcta
+
+# Recorre la grid una por una para obtener los datos y entonces hacer el 
+# recorrido según cordenadas estraidas de vectores
+for columna in range(len(grid_master[0])):
+    for fila in range(len(grid_master)):
+        posicion=grid_master[fila][columna]
+        matriz_correcta[fila][columna]=int(posicion[2])
+
+for fila in range(len(grid_master[0])):
+    print("matriz:", matriz_correcta[fila])
+
+
+
+#Orden ascendente de la posicion en la matriz para los distintos objetos 
+# de la matriz con los objetos ordenados correctamente
 def leer_matriz_correcta(M,R,A,Y,B):
     filas = len(M)
     columnas = len(M[0])
@@ -130,6 +165,7 @@ def lista_de_movimientos(CR,R,CA,A,CY,Y,CB,B):
             posicion_inicial[0] = B[contador_blanco]
             contador_blanco = contador_blanco + 1
     Movimientos_grua[(len(Movimientos_grua))-1] = Movimientos_grua[0]
+
 
 #Obtiene a cual posicion se debe colocar el objeto
 def obtiene_Mcolor(Xi):
@@ -212,15 +248,15 @@ def matriz_color(P):
 
 #Función que recibe la posición del objeto mal colocado y la posición a la que debe cambiarlo
 #Programación que le llega los movimientos a realizar y los implementa fisicamente
-def mover_objeto(M_movimientos):
-    i = 0
-    num = len(M_movimientos) - 1
-    print("---------------------------------------------\n")
-    while i < num:
-        print("El valor inicial es (mover objeto) ",M_movimientos[i+1],"\n")
-        print("El valor final es (colocar objeto) ",M_movimientos[i],"\n")
-        print("---------------------------------------------\n")
-        i = i + 1
+# def mover_objeto(M_movimientos):
+#     i = 0
+#     num = len(M_movimientos) - 1
+#     print("---------------------------------------------\n")
+#     while i < num:
+#         print("El valor inicial es (mover objeto) ",M_movimientos[i+1],"\n")
+#         print("El valor final es (colocar objeto) ",M_movimientos[i],"\n")
+#         print("---------------------------------------------\n")
+#         i = i + 1
 
 
 #Llamar Modo Reacomodo
@@ -232,4 +268,5 @@ def Modo_Reacomodo():
     eliminar_valor(C_Amarillo,Color_Amarillo)
     eliminar_valor(C_Blanco,Color_Blanco)
     lista_de_movimientos(C_Rojo,Color_Rojo,C_Azul,Color_Azul,C_Amarillo,Color_Amarillo,C_Blanco,Color_Blanco)
-    mover_objeto(Movimientos_grua)
+    return Movimientos_grua
+    #mover_objeto(Movimientos_grua)
