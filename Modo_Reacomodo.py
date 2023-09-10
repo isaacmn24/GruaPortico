@@ -115,20 +115,32 @@ def lista_de_movimientos(CR,R,CA,A,CY,Y,CB,B):
     while Movimientos_grua[1] != posicion_inicial[0]:
         Macolor = obtiene_Mcolor(posicion_inicial)
         if Macolor == 1:
-            posicion_inicial[0] = R[contador_rojo]
-            Movimientos_grua.append(posicion_inicial[0])
-            contador_rojo = contador_rojo + 1
+            if len(R) == contador_rojo:
+                posicion_inicial[0] = Movimientos_grua[1]
+            else:
+                posicion_inicial[0] = R[contador_rojo]
+                Movimientos_grua.append(posicion_inicial[0])
+                contador_rojo = contador_rojo + 1
         elif Macolor == 2:
-            posicion_inicial[0] = A[contador_azul]
-            Movimientos_grua.append(posicion_inicial[0])
-            contador_azul = contador_azul + 1
+            if len(A) == contador_azul:
+                posicion_inicial[0] = Movimientos_grua[1]
+            else:
+                posicion_inicial[0] = A[contador_azul]
+                Movimientos_grua.append(posicion_inicial[0])
+                contador_azul = contador_azul + 1
         elif Macolor == 3:
-            posicion_inicial[0] = Y[contador_amarillo]
-            Movimientos_grua.append(posicion_inicial[0])
-            contador_amarillo = contador_amarillo + 1
+            if len(Y) == contador_amarillo:
+                posicion_inicial[0] = Movimientos_grua[1]
+            else:
+                posicion_inicial[0] = Y[contador_amarillo]
+                Movimientos_grua.append(posicion_inicial[0])
+                contador_amarillo = contador_amarillo + 1
         elif Macolor == 4:
-            posicion_inicial[0] = B[contador_blanco]
-            contador_blanco = contador_blanco + 1
+            if len(B) == contador_blanco:
+                posicion_inicial[0] = Movimientos_grua[1]
+            else:
+                posicion_inicial[0] = B[contador_blanco]
+                contador_blanco = contador_blanco + 1
     Movimientos_grua[(len(Movimientos_grua))-1] = Movimientos_grua[0]
 
 #Obtiene a cual posicion se debe colocar el objeto
