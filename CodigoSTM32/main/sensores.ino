@@ -20,31 +20,27 @@
 
 // SENSOR DE COLOR
 SFE_ISL29125 RGB_sensor;
-
+UltraSonicDistanceSensor ultrasonic_sensor(triggerPin, echoPin);  // Initialize sensor that uses digital pins 13 and 12.
 
 void setup_sensores()
 {
   // INICIO SENSORES
   // ****** Idea: Hacer función que compruebe funcionamiento de sensores, para que si no funciona alguno de los dos lo avise
-  HCSR04.begin(triggerPin, echoPin);
   if (RGB_sensor.init())
   {
     Serial.println("Sensor Initialization Successful\n\r");
   }
 }
 
-unsigned int *leerColores()
+void leerColores(unsigned int *rgb)
 {
-  static unsigned int rgb[3];   // Array que contiene los valores RGB leídos por el sensor
   rgb[0] = RGB_sensor.readRed();    // Leer rojo
   rgb[1] = RGB_sensor.readGreen();  // Leer verde
   rgb[2] = RGB_sensor.readBlue();   // Leer azul
-  return rgb;
 }
 
-double leerDistancia()
+float leerDistancia()
 {
-  double* distancias = HCSR04.measureDistanceCm();
-  return distancias[0];
+  return ultrasonic_sensor.measureDistanceCm();
 }
 
