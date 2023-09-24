@@ -1,6 +1,14 @@
 #Codigo de reacomodo
 #Para el funcionamiento correcto se debe mantener el mismo orden de la grid_espacial
 
+#esta bandera nos indica si reacomodamos comparando en la matriz correcta o se realiza el
+#reacomodamiento de forma automatica
+bandera_vacio = [0]
+posiciones_correctas = []
+
+#bandera que verifica que la matriz ya esta ordenada correctamente
+bandera = [0]
+
 #array para la posición de los colores escaneados en la matriz espacial
 Color_Rojo = []
 Color_Azul = []
@@ -32,40 +40,43 @@ grid_espacial = [[[0,0], [1,0], [2,0], [3,0], [4,0]],
 
 
 #Archivo excel donde viene la posición de los objetos correctamente
-matriz_correcta = [[1, 2, 3, 1, 3],
-                   [2, 1, 1, 2, 2],
-                   [1, 2, 3, 2, 3],
-                   [1, 2, 3, 1, 2],
-                   [3, 2, 3, 1, 3]]
-# 8 color rojo
-# 9 color azul
-# 8 color amarillo
+matriz_correcta = [[1, 4, 1, 2, 1],
+                   [4, 2, 4, 3, 1],
+                   [3, 4, 3, 4, 2],
+                   [4, 2, 1, 3, 3],
+                   [1, 4, 1, 4, 2]]
+# 7 color rojo
+# 5 color azul
+# 5 color amarillo
 
 
 #Esta matriz se consigue escaneando la matriz 5x5
-matriz_escaneada = [[3, 2, 1, 1, 3],
-                    [2, 1, 1, 3, 1],
-                    [1, 1, 3, 2, 3],
-                    [1, 2, 3, 2, 4],
-                    [2, 2, 2, 3, 3]]
+matriz_escaneada = [[3, 1, 4, 4, 1],
+                    [3, 2, 2, 2, 1],
+                    [3, 4, 4, 3, 1],
+                    [1, 2, 4, 1, 4],
+                    [4, 1, 2, 3, 4]]
 # 8 color rojo
 # 8 color azul
-# 8 color amarillo
-# 1 color blanco
+# 9 color amarillo
+# 0 color blanco
 
 
 #Orden ascendente de la posicion en la matriz para los distintos objetos de la matriz con los objetos ordenados correctamente
-def leer_matriz_correcta(M,R,A,Y,B):
+def leer_matriz_correcta(M,R,A,Y,B,O):
     filas = len(M)
     columnas = len(M[0])
     for i in range(filas):
         for j in range(columnas):
             if M[j][i] == 1:
                 R.append(grid_espacial[j][i])
+                O.append(grid_espacial[j][i])
             elif M[j][i] == 2:
                 A.append(grid_espacial[j][i])
+                O.append(grid_espacial[j][i])
             elif M[j][i] == 3:
                 Y.append(grid_espacial[j][i])
+                O.append(grid_espacial[j][i])
             elif M[j][i] == 4:
                 B.append(grid_espacial[j][i])        
 
@@ -110,8 +121,8 @@ def lista_de_movimientos(CR,R,CA,A,CY,Y,CB,B):
         Movimientos_grua.append(CB[0])
         posicion_inicial.append(B[0])
         contador_blanco = contador_blanco + 1
-        
-    Movimientos_grua.append(posicion_inicial[0])   
+    Movimientos_grua.append(posicion_inicial[0])
+    objeto_vacio(B,Movimientos_grua[1])
     while Movimientos_grua[1] != posicion_inicial[0]:
         Macolor = obtiene_Mcolor(posicion_inicial)
         if Macolor == 1:
@@ -141,7 +152,7 @@ def lista_de_movimientos(CR,R,CA,A,CY,Y,CB,B):
             else:
                 posicion_inicial[0] = B[contador_blanco]
                 contador_blanco = contador_blanco + 1
-    Movimientos_grua[(len(Movimientos_grua))-1] = Movimientos_grua[0]
+
 
 #Obtiene a cual posicion se debe colocar el objeto
 def obtiene_Mcolor(Xi):
@@ -158,7 +169,7 @@ def obtiene_Mcolor(Xi):
         if Xi[0] == C_Amarillo[y]:
             Mcolor = 3
             return Mcolor
-    for k in range(len(C_Rojo)):
+    for k in range(len(C_Blanco)):
         if Xi[0] == C_Blanco[k]:
             Mcolor = 4
             return Mcolor
@@ -183,7 +194,17 @@ def obtener_posicion(CR,CA,CY,CB):
     elif d != 0:
         posicion = 4
         return posicion
-    
+
+#En caso de que la pimera posicion se encuentre en la matriz Blanca escaneada, esta
+#funcion pasa esa poscion al ultimo indice
+def objeto_vacio(CB,Xi):
+    filas = len(CB)
+    indice = []
+    for i in range(filas):
+        if CB[i] == Xi:
+            indice.append(i)
+    borrar_escaneado(CB,indice)
+    CB.append(Xi)
 
 #va descartando los valores que se encuentran correctamente
 #busca los indices de los valores correctosd entre la amtriz correcta y la matriz escaneada y llama borrar_valor
@@ -235,13 +256,102 @@ def mover_objeto(M_movimientos):
         i = i + 1
 
 
+#descubre en cual modo se esta trabajando
+def descubrir_bandera():
+    numero = len(matriz_correcta)
+    for i in range(numero):
+        for j in range(numero):
+            if matriz_correcta[i][j] == 4:
+                if matriz_correcta[i][j] != matriz_escaneada[i][j]:
+                    bandera_vacio[0] = 1
+
+matriz_ayuda = []
+matriz_esccopia = []
+matriz_corcopia = []
+coordenadas = []
+Movimiento_1 = []
+Movimiento_2 = []
+son_igual = [0]
+
+
+def hacer_listas(M,Copia):
+    filas = len(M)
+    columnas = len(M[0])
+    for i in range(filas):
+        for j in range(columnas):
+            Copia.append(M[j][i])
+
+#Función que ayuda a saber que las listas estan ordenadas correctamente
+def son_iguales():
+    num = 0
+    filas = len(matriz_esccopia)
+    for i in range(filas):
+        if matriz_corcopia[i] == matriz_esccopia[i]:
+            num = num + 1
+    son_igual[0] = num
+
+#Acomoda los objetos
+def modo_espVacio():
+    seguir = -1
+    for cont_copia in range(len(matriz_esccopia)):
+        if matriz_corcopia[cont_copia] != matriz_esccopia[cont_copia]:
+            if matriz_esccopia[cont_copia] != 4:
+                for j in range(len(matriz_esccopia)):
+                    if matriz_esccopia[j] == 4:
+                        if j > seguir:
+                            if matriz_corcopia[j] == matriz_esccopia[cont_copia]:
+                                Movimiento_1.append(coordenadas[cont_copia])
+                                Movimiento_2.append(coordenadas[j])
+                                matriz_ayuda[j] = matriz_esccopia[cont_copia]
+                                matriz_ayuda[cont_copia] = 4
+                                seguir = j
+                                break 
+    
+#Realiza ciclos hasta que se haya completado de ordenar la matriz
+def ciclo():
+    while 24 > son_igual[0]:
+        modo_espVacio()
+        intercambio()
+        son_iguales()
+
+#Actualiza las listas para volver a comparar valores
+def intercambio():
+    filas = len(matriz_esccopia)
+    for i in range(filas):
+        matriz_esccopia[i] = matriz_ayuda[i]
+
+
+def movimientos_modo_espacios_ceros():
+    print("---------------------------------------------\n")
+    for i in range(len(Movimiento_1)):
+        print("El valor inicial es (mover objeto) ",Movimiento_1[i],"\n")
+        print("El valor final es (colocar objeto) ",Movimiento_2[i],"\n")
+        print("---------------------------------------------\n")
+
+    
 #Llamar Modo Reacomodo
 def Modo_Reacomodo():
-    leer_matriz_correcta(matriz_correcta,C_Rojo,C_Azul,C_Amarillo,C_Blanco)
+    descubrir_bandera()
+    leer_matriz_correcta(matriz_correcta,C_Rojo,C_Azul,C_Amarillo,C_Blanco,posiciones_correctas)
     leer_matriz_escaneada(matriz_escaneada,Color_Rojo,Color_Azul,Color_Amarillo,Color_Blanco)
     eliminar_valor(C_Rojo,Color_Rojo)
     eliminar_valor(C_Azul,Color_Azul)
     eliminar_valor(C_Amarillo,Color_Amarillo)
     eliminar_valor(C_Blanco,Color_Blanco)
     lista_de_movimientos(C_Rojo,Color_Rojo,C_Azul,Color_Azul,C_Amarillo,Color_Amarillo,C_Blanco,Color_Blanco)
-    mover_objeto(Movimientos_grua)
+    if bandera_vacio[0] == 0:
+        print("modo sin espacios \n")
+        Movimientos_grua[(len(Movimientos_grua))-1] = Movimientos_grua[0]
+        mover_objeto(Movimientos_grua)
+    else:
+        print("modo espacios vacios \n")
+        hacer_listas(matriz_correcta,matriz_corcopia)
+        hacer_listas(matriz_escaneada,matriz_esccopia)
+        hacer_listas(matriz_escaneada,matriz_ayuda)
+        hacer_listas(grid_espacial,coordenadas)
+        son_iguales()
+        ciclo()
+        movimientos_modo_espacios_ceros()
+        bandera_vacio[0] = 0
+
+Modo_Reacomodo()    
