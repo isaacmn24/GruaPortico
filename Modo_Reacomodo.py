@@ -332,15 +332,15 @@ def movimientos_modo_espacios_ceros():
 #Llamar Modo Reacomodo
 def Modo_Reacomodo():
     descubrir_bandera()
-    leer_matriz_correcta(matriz_correcta,C_Rojo,C_Azul,C_Amarillo,C_Blanco,posiciones_correctas)
-    leer_matriz_escaneada(matriz_escaneada,Color_Rojo,Color_Azul,Color_Amarillo,Color_Blanco)
-    eliminar_valor(C_Rojo,Color_Rojo)
-    eliminar_valor(C_Azul,Color_Azul)
-    eliminar_valor(C_Amarillo,Color_Amarillo)
-    eliminar_valor(C_Blanco,Color_Blanco)
-    lista_de_movimientos(C_Rojo,Color_Rojo,C_Azul,Color_Azul,C_Amarillo,Color_Amarillo,C_Blanco,Color_Blanco)
     if bandera_vacio[0] == 0:
         print("modo sin espacios \n")
+        leer_matriz_correcta(matriz_correcta,C_Rojo,C_Azul,C_Amarillo,C_Blanco,posiciones_correctas)
+        leer_matriz_escaneada(matriz_escaneada,Color_Rojo,Color_Azul,Color_Amarillo,Color_Blanco)
+        eliminar_valor(C_Rojo,Color_Rojo)
+        eliminar_valor(C_Azul,Color_Azul)
+        eliminar_valor(C_Amarillo,Color_Amarillo)
+        eliminar_valor(C_Blanco,Color_Blanco)
+        lista_de_movimientos(C_Rojo,Color_Rojo,C_Azul,Color_Azul,C_Amarillo,Color_Amarillo,C_Blanco,Color_Blanco)
         Movimientos_grua[(len(Movimientos_grua))-1] = Movimientos_grua[0]
         mover_objeto(Movimientos_grua)
     else:
