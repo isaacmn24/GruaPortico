@@ -2,7 +2,6 @@ import pygame, sys
 import random
 
 
-
 rojo = (255, 0, 0)
 verde = (0, 255, 0)
 azul = (0, 0, 255)
@@ -10,10 +9,6 @@ azul = (0, 0, 255)
 diccionario = {0:rojo, 1:verde, 2:azul}
 
 matriz=[]
-
-eliminar=0
-
-pygame.init()
 
 # Tamaño de Pantalla
 pantalla_X = 900
@@ -29,14 +24,22 @@ Objetivo_Y = 3
 eje_x = 210
 eje_y = 50
 
+eliminar = 0
 Par_ordenado = 0
 
 color = random.randint(0,2) # color inicial
+
+pygame.init()
+
+pygame.display.set_caption("Grúa Pórtico")
 
 resolucion = (pantalla_X,pantalla_Y)
 reloj = pygame.time.Clock()
 
 ventana = pygame.display.set_mode(resolucion)
+
+def redraw():
+	ventana.fill((204,204,204)) # Fondo blanco
 
 while True:
 	for event in pygame.event.get():
@@ -101,9 +104,7 @@ while True:
 			
 				del matriz[0]
 
-
-	ventana.fill((255,255,255)) # Fondo blanco
-
+	redraw()
 
 	# Matriz
 	for i in range (6):
@@ -140,5 +141,5 @@ while True:
 	for i in range (len(matriz)): # Recorrer la matriz dibujando los circulos previos
 		pygame.draw.circle(ventana,diccionario[matriz[i][2]], (((matriz[i][0]*100)+(160)),((matriz[i][1]*100))), 30)
 
-	pygame.display.flip() # Refrescar pantalla
+	pygame.display.update() # Refrescar pantalla
 	reloj.tick(60) # FPS
