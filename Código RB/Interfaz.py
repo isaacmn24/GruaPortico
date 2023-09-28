@@ -52,7 +52,7 @@ class Pantalla(object):
 		for i in range (len(self.matriz)): 
 			pygame.draw.circle(self.ventana,diccionario[self.matriz[i][2]], (((self.matriz[i][0]*100)+(160)),((self.matriz[i][1]*100))), 30)
 		
-		pygame.display.update() # Refrescar pantalla
+		pygame.display.flip() # Refrescar pantalla
 
 	def ejecutar(self,Direccion_X,Direccion_Y):
 		global pieza
@@ -135,11 +135,6 @@ class Circulo(object):
 		if (self.Circulo_Y < Destino_Y):
 			self.Circulo_Y += 5
 
-# Tamaño de Pantalla
-pantalla_X = 900
-pantalla_Y = 600
-
-pantalla = Pantalla(pantalla_X,pantalla_Y)
 
 # Ubicación y dirección de pieza
 Circulo_X = 60
@@ -150,6 +145,19 @@ Color = random.randint(0,2) # color inicial
 
 pieza = Circulo(Circulo_X,Circulo_Y,Color,Objetivo_X,Objetivo_Y)
 
-pantalla.ejecutar(5,5)
+# Quitar comentarios si se quiere probar
+
+# # Tamaño de Pantalla
+# pantalla_X = 900
+# pantalla_Y = 600
+
+# # creacion de objeto pantalla
+# pantalla = Pantalla(pantalla_X,pantalla_Y)
+
+# # Manda coordenada, que se asigna al presionar m
+# pantalla.ejecutar(4,4)
+
+# se sigue guardando con el espacio
+
 
 

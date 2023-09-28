@@ -1,6 +1,41 @@
 # import Modo_Reacomodo
-import Interfaz
+import pygame
+import sys
+from Interfaz import Pantalla
 
+def main():
+    pygame.init()
+    # Tamaño de Pantalla
+    pantalla_X = 900
+    pantalla_Y = 600
+
+    # creacion de objeto pantalla
+    pantalla = Pantalla(pantalla_X,pantalla_Y)
+    reloj = pygame.time.Clock()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+        
+        pantalla.ejecutar(5,5)
+        
+        pygame.display.flip()
+        reloj.tick(60)
+
+if __name__ == "__main__":
+    main()
+
+# # # Tamaño de Pantalla
+# # pantalla_X = 900
+# # pantalla_Y = 600
+
+# # # creacion de objeto pantalla
+# # pantalla = Pantalla(pantalla_X,pantalla_Y)
+
+# # while True:
+# #     #manda constantemente coordenada y ejecuta pantalla
+# #     pantalla.ejecutar(4,4)
 # M_movimientos=Modo_Reacomodo.Modo_Reacomodo()
 
 # def mover_objeto(M_movimientos):
