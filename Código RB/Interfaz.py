@@ -1,20 +1,55 @@
 #cambios para comprobar 2 branch
-
 import pygame, sys
 import random
 
-# Tamaño de Pantalla
-pantalla_X = 900
-pantalla_Y = 600
-
-pygame.init()
-
-pygame.display.set_caption("Grúa Pórtico")
-
-resolucion = (pantalla_X,pantalla_Y)
 reloj = pygame.time.Clock()
 
-ventana = pygame.display.set_mode(resolucion)
+rojo = (255, 0, 0)
+verde = (0, 255, 0)
+azul = (0, 0, 255)
+ 
+diccionario = {0:rojo, 1:verde, 2:azul}
+
+matriz=[]
+
+class Pantalla(object):
+	def __init__(self,Pantalla_X, Pantalla_Y):
+		pygame.init()
+		
+		pygame.display.set_caption("Grúa Pórtico")
+		
+		self.pantalla_X = Pantalla_X
+		self.pantalla_Y = Pantalla_Y
+		self.resolucion = (self.pantalla_X,self.pantalla_Y)
+		
+		self.ventana = pygame.display.set_mode(self.resolucion)
+
+	def redraw(self):
+		self.ventana.fill((204,204,204)) # Fondo blanco
+
+		# Espaciado matriz
+		eje_x = 210
+		eje_y = 50
+
+		# Matriz
+		for i in range (6):
+			pygame.draw.line(self.ventana, rojo, [eje_x+(100*(i)),eje_y], [eje_x+(100*(i)),eje_y+500],4) # verticales
+			pygame.draw.line(self.ventana, rojo, [eje_x,eje_y+(100*i)], [eje_x+500,eje_y+(100*i)],4) # horizontales
+
+		# Cuadro de carga
+		pygame.draw.line(self.ventana, rojo, [10,250], [10, 350],4)
+		pygame.draw.line(self.ventana, rojo, [110,250], [110, 350],4)
+		pygame.draw.line(self.ventana, rojo, [10,250], [110,250],4)
+		pygame.draw.line(self.ventana, rojo, [10,350], [110,350],4)
+
+		# Dibuja Pieza
+		pieza.draw(self.ventana)
+
+		# Recorrer la matriz dibujando los circulos previos 
+		for i in range (len(matriz)): 
+			pygame.draw.circle(self.ventana,diccionario[matriz[i][2]], (((matriz[i][0]*100)+(160)),((matriz[i][1]*100))), 30)
+		
+		pygame.display.update() # Refrescar pantalla
 
 class Circulo(object):
 	def __init__(self,Circulo_X,Circulo_Y,Color,Objetivo_X,Objetivo_Y):
@@ -49,39 +84,11 @@ class Circulo(object):
 		if (self.Circulo_Y < Destino_Y):
 			self.Circulo_Y += 5
 
-def redraw():
-	ventana.fill((204,204,204)) # Fondo blanco
+# Tamaño de Pantalla
+pantalla_X = 900
+pantalla_Y = 600
 
-	# Espaciado matriz
-	eje_x = 210
-	eje_y = 50
-
-	# Matriz
-	for i in range (6):
-		pygame.draw.line(ventana, rojo, [eje_x+(100*(i)),eje_y], [eje_x+(100*(i)),eje_y+500],4) # verticales
-		pygame.draw.line(ventana, rojo, [eje_x,eje_y+(100*i)], [eje_x+500,eje_y+(100*i)],4) # horizontales
-
-	# Cuadro de carga
-	pygame.draw.line(ventana, rojo, [10,250], [10, 350],4)
-	pygame.draw.line(ventana, rojo, [110,250], [110, 350],4)
-	pygame.draw.line(ventana, rojo, [10,250], [110,250],4)
-	pygame.draw.line(ventana, rojo, [10,350], [110,350],4)
-
-	# Dibuja Pieza
-	pieza.draw(ventana)
-	# Recorrer la matriz dibujando los circulos previos 
-	for i in range (len(matriz)): 
-		pygame.draw.circle(ventana,diccionario[matriz[i][2]], (((matriz[i][0]*100)+(160)),((matriz[i][1]*100))), 30)
-	
-	pygame.display.update() # Refrescar pantalla
-
-rojo = (255, 0, 0)
-verde = (0, 255, 0)
-azul = (0, 0, 255)
- 
-diccionario = {0:rojo, 1:verde, 2:azul}
-
-matriz=[]
+pantalla = Pantalla(pantalla_X,pantalla_Y)
 
 # Ubicación y dirección de pieza
 Circulo_X = 60
@@ -160,7 +167,7 @@ while True:
 				# del matriz[0]
 				matriz = []
 
-	redraw()
+	pantalla.redraw()
 
 	pieza.Posicionamiento()
 
