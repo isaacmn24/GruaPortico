@@ -10,7 +10,7 @@
 */
 
 // LIBRERÍAS
-//#include <Wire.h>
+#include <Wire.h>
 #include <SparkFunISL29125.h>
 #include <HCSR04.h>
 
@@ -20,7 +20,6 @@
 
 // SENSOR DE COLOR
 SFE_ISL29125 RGB_sensor;
-
 
 void setup_sensores()
 {
@@ -33,13 +32,12 @@ void setup_sensores()
   }
 }
 
-unsigned int *leerColores()
+unsigned int leerColores(unsigned int *rgb)
 {
-  static unsigned int rgb[3];   // Array que contiene los valores RGB leídos por el sensor
+  // Array que contiene los valores RGB leídos por el sensor
   rgb[0] = RGB_sensor.readRed();    // Leer rojo
   rgb[1] = RGB_sensor.readGreen();  // Leer verde
   rgb[2] = RGB_sensor.readBlue();   // Leer azul
-  return rgb;
 }
 
 double leerDistancia()
