@@ -20,29 +20,20 @@
 
 // SENSOR DE COLOR
 SFE_ISL29125 RGB_sensor;
-<<<<<<< HEAD
-=======
-UltraSonicDistanceSensor ultrasonic_sensor(triggerPin, echoPin);  // Initialize sensor that uses digital pins 13 and 12.
->>>>>>> ea1679d1b09f9b56a775a4cd2e5ab226f187f2fe
 
 void setup_sensores()
 {
   // INICIO SENSORES
   // ****** Idea: Hacer función que compruebe funcionamiento de sensores, para que si no funciona alguno de los dos lo avise
+  UltraSonicDistanceSensor ultrasonic_sensor(triggerPin, echoPin);
   if (RGB_sensor.init())
   {
     Serial.println("Sensor Initialization Successful\n\r");
   }
 }
 
-<<<<<<< HEAD
-unsigned int leerColores(unsigned int *rgb)
-{
-  // Array que contiene los valores RGB leídos por el sensor
-=======
 void leerColores(unsigned int *rgb)
 {
->>>>>>> ea1679d1b09f9b56a775a4cd2e5ab226f187f2fe
   rgb[0] = RGB_sensor.readRed();    // Leer rojo
   rgb[1] = RGB_sensor.readGreen();  // Leer verde
   rgb[2] = RGB_sensor.readBlue();   // Leer azul
