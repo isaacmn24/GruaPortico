@@ -1,6 +1,6 @@
 #include <Wire.h>
 
-const int buttonPin = 23;  // Button pin on ESP32
+const int buttonPin = PA0;  // Button pin on STM32
 
 void setup() {
   Wire.begin(0x08);
@@ -9,7 +9,7 @@ void setup() {
 }
 
 void loop() {
-  int buttonState = digitalRead(buttonPin);
+  byte buttonState = digitalRead(buttonPin);
   byte dataToSend;
   Serial.println(buttonState);
   if (buttonState == LOW) {
@@ -18,9 +18,9 @@ void loop() {
     dataToSend = 0x10;  // Button not pressed
   }
 
-  Wire.beginTransmission(0x08); // Replace with your Raspberry Pi's I2C address
+  Wire.beginTransmission(0x08);
   Wire.write(dataToSend);
   Wire.endTransmission();
 
-  delay(100);  // Add a small delay for stability
+  delay(500);  // Add a small delay for stability
 }
