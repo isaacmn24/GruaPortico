@@ -142,7 +142,7 @@ Circulo_X = 60
 Circulo_Y = 300
 Objetivo_X = -1
 Objetivo_Y = 3
-Color = random.randint(1,4) # color inicial
+Color = random.randint(1,3) # color inicial
 
 pieza = Circulo(Circulo_X,Circulo_Y,Color,Objetivo_X,Objetivo_Y)
 
