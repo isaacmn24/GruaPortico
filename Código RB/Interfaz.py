@@ -4,11 +4,12 @@ import random
 
 reloj = pygame.time.Clock()
 
-rojo = (255, 0, 0)
-verde = (0, 255, 0)
-azul = (0, 0, 255)
+rojo = (255,0,0)
+verde = (0,255,0)
+azul = (0,0,255)
+blanco = (255,255,255)
  
-diccionario = {0:rojo, 1:verde, 2:azul}
+diccionario = {1:rojo, 2:azul, 3:verde, 4:blanco}
 
 
 #Clase para creación de pantalla y poder ingresarle datos desde main
@@ -54,12 +55,13 @@ class Pantalla(object):
 		
 		pygame.display.flip() # Refrescar pantalla
 
-	def ejecutar(self,Direccion_X,Direccion_Y):
+	def ejecutar(self,Direccion_X,Direccion_Y,M_Master):
 		global pieza
 
 		# Direcciónes que se indican al ejecutar pantalla, ahi deben de ir los circulos
 		self.Direcion_X = Direccion_X
 		self.Direcion_Y = Direccion_Y
+		self.matriz = M_Master				
 
 		while True:
 			for event in pygame.event.get():
@@ -73,7 +75,6 @@ class Pantalla(object):
 						pieza.Objetivo_X = self.Direcion_X
 						pieza.Objetivo_Y = self.Direcion_Y
 
-
 					if event.key == pygame.K_SPACE: # Si coloco nuevo objeto
 
 						self.matriz.append([pieza.Objetivo_X, pieza.Objetivo_Y, pieza.Color]) # Meto sus datos en lista
@@ -84,7 +85,7 @@ class Pantalla(object):
 						Objetivo_X = -1
 						Objetivo_Y = 3
 						
-						Color = random.randint(0,2)
+						Color = random.randint(1,3)
 						
 						pieza = Circulo(Circulo_X,Circulo_Y,Color,Objetivo_X,Objetivo_Y)				
 
@@ -141,7 +142,7 @@ Circulo_X = 60
 Circulo_Y = 300
 Objetivo_X = -1
 Objetivo_Y = 3
-Color = random.randint(0,2) # color inicial
+Color = random.randint(1,4) # color inicial
 
 pieza = Circulo(Circulo_X,Circulo_Y,Color,Objetivo_X,Objetivo_Y)
 
