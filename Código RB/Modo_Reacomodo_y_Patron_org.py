@@ -1,8 +1,6 @@
 #Codigo de reacomodo
 #Para el funcionamiento correcto se debe mantener el mismo orden de la grid_espacial
 
-import lectura_csv
-
 #esta bandera nos indica si reacomodamos comparando en la matriz correcta o se realiza el
 #reacomodamiento de forma automatica
 bandera_vacio = [0]
@@ -24,7 +22,7 @@ C_Amarillo = []
 C_Blanco = []
 
 #Array Movimientos a realizar
-Movimientos_grua = [[-1,3]]
+Movimientos_grua = [[5,5]]
 
 Matriz_lectura_zona_de_carga = [1,2,3,1,3,2,1,1,1,1,1,2,2,2,3,3,3,1,2,3,1,2,3,1,2]
 
@@ -64,38 +62,6 @@ matriz_escaneada = [[3, 1, 4, 4, 1],
 # 9 color amarillo
 # 0 color blanco
 
-#################################################33
-
-# lectura de csv y asignación de posiciones y tipo
-grid_master=[]
-formato_lista_from_csv=[]
-grid_master=lectura_csv.lectura_csv()
-# Recorre la grid una por una para obtener los datos y entonces hacer el 
-# recorrido según cordenadas estraidas de vectores
-for columna in range(len(grid_master[0])):
-    for fila in range(len(grid_master)):
-        posicion=grid_master[fila][columna]
-        grid_espacial[fila][columna]=[int(posicion[0]), int(posicion[1])]
-        formato_lista_from_csv.append([int(posicion[0]), int(posicion[1]),int(posicion[2])])
-        # se almacena vector de cada espacio en matriz
-
-# for fila in range(len(grid_master[0])):
-#     print("matriz:", grid_espacial[fila])
-
-
-#Almacenamiento en matriz correcta
-
-# Recorre la grid una por una para obtener los datos y entonces hacer el 
-# recorrido según cordenadas estraidas de vectores
-for columna in range(len(grid_master[0])):
-    for fila in range(len(grid_master)):
-        posicion=grid_master[fila][columna]
-        matriz_correcta[fila][columna]=int(posicion[2])
-
-# for fila in range(len(grid_master[0])):
-#     print("matriz:", matriz_correcta[fila])
-
-#####################################################################
 
 #Orden ascendente de la posicion en la matriz para los distintos objetos de la matriz con los objetos ordenados correctamente
 def leer_matriz_correcta(M,R,A,Y,B,O):
@@ -278,17 +244,17 @@ def matriz_color(P):
         print('|')
 
 
-# #Función que recibe la posición del objeto mal colocado y la posición a la que debe cambiarlo
-# #Programación que le llega los movimientos a realizar y los implementa fisicamente
-# def mover_objeto(M_movimientos):
-#     i = 0
-#     num = len(M_movimientos) - 1
-#     print("---------------------------------------------\n")
-#     while i < num:
-#         print("El valor inicial es (mover objeto) ",M_movimientos[i+1],"\n")
-#         print("El valor final es (colocar objeto) ",M_movimientos[i],"\n")
-#         print("---------------------------------------------\n")
-#         i = i + 1
+#Función que recibe la posición del objeto mal colocado y la posición a la que debe cambiarlo
+#Programación que le llega los movimientos a realizar y los implementa fisicamente
+def mover_objeto(M_movimientos):
+    i = 0
+    num = len(M_movimientos) - 1
+    print("---------------------------------------------\n")
+    while i < num:
+        print("El valor inicial es (mover objeto) ",M_movimientos[i+1],"\n")
+        print("El valor final es (colocar objeto) ",M_movimientos[i],"\n")
+        print("---------------------------------------------\n")
+        i = i + 1
 
 
 #descubre en cual modo se esta trabajando
@@ -368,7 +334,7 @@ def movimientos_modo_espacios_ceros():
 def Modo_Reacomodo():
     descubrir_bandera()
     if bandera_vacio[0] == 0:
-        #print("modo sin espacios \n")
+        print("modo sin espacios \n")
         C_Rojo.clear()
         C_Azul.clear()
         C_Amarillo.clear()
@@ -382,8 +348,7 @@ def Modo_Reacomodo():
         eliminar_valor(C_Blanco,Color_Blanco)
         lista_de_movimientos(C_Rojo,Color_Rojo,C_Azul,Color_Azul,C_Amarillo,Color_Amarillo,C_Blanco,Color_Blanco)
         Movimientos_grua[(len(Movimientos_grua))-1] = Movimientos_grua[0]
-        return Movimientos_grua, matriz_escaneada, matriz_correcta, formato_lista_from_csv
-        #mover_objeto(Movimientos_grua)
+        mover_objeto(Movimientos_grua)
     else:
         print("modo espacios vacios \n")
         hacer_listas(matriz_correcta,matriz_corcopia)
@@ -424,7 +389,8 @@ def Modo_Patron():
         maximo = maximo + 1
 
 
-Modo_Reacomodo()        
+        
+Modo_Patron()
 
 
     

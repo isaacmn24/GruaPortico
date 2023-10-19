@@ -76,7 +76,7 @@ for columna in range(len(grid_master[0])):
 #     print("matriz:", grid_espacial[fila])
 
 
-#Almacenamiento en matri correcta
+#Almacenamiento en matriz correcta
 
 # Recorre la grid una por una para obtener los datos y entonces hacer el 
 # recorrido según cordenadas estraidas de vectores

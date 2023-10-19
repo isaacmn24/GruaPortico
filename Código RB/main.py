@@ -1,10 +1,10 @@
-import Modo_Reacomodo
+import Modo_Reacomodo_y_Patron
 
 import pygame
 import sys
 from Interfaz import Pantalla
 
-M_movimientos, M_escaneada, M_correcta, M_master=Modo_Reacomodo.Modo_Reacomodo()
+M_movimientos, M_escaneada, M_correcta, M_master=Modo_Reacomodo_y_Patron.Modo_Reacomodo()
 
 def mover_objeto(M_movimientos):
     i = 0
