@@ -44,12 +44,11 @@ grid_espacial = [[[0,0], [1,0], [2,0], [3,0], [4,0]],
 matriz_correcta = [[1, 3, 1, 2, 1],
                    [1, 2, 3, 3, 1],
                    [3, 1, 3, 1, 2],
-                   [2, 2, 1, 3, 3],
+                   [2, 2, 1, 4, 3],
                    [1, 2, 1, 2, 2]]
-# 7 color rojo
+
 # 5 color azul
 # 5 color amarillo
-
 
 #Esta matriz se consigue escaneando la matriz 5x5
 matriz_escaneada = [[3, 1, 4, 4, 1],
@@ -390,7 +389,7 @@ def Modo_Patron():
 
 
         
-Modo_Patron()
+Modo_Reacomodo()
 
 
     

@@ -66,34 +66,33 @@ matriz_escaneada = [[3, 1, 4, 4, 1],
 
 #################################################33
 
+# Creación de matrices mediante lectura de grid master, esto para diferentes
+# diferentes formatos de lectura e indicaciónes específicas
+
 # lectura de csv y asignación de posiciones y tipo
 grid_master=[]
 formato_lista_from_csv=[]
 grid_master=lectura_csv.lectura_csv()
 # Recorre la grid una por una para obtener los datos y entonces hacer el 
-# recorrido según cordenadas estraidas de vectores
+# recorrido según coordenadas extraidas de vectores
 for columna in range(len(grid_master[0])):
     for fila in range(len(grid_master)):
         posicion=grid_master[fila][columna]
+        posicion_escaneada=matriz_escaneada[fila][columna]
         grid_espacial[fila][columna]=[int(posicion[0]), int(posicion[1])]
-        formato_lista_from_csv.append([int(posicion[0]), int(posicion[1]),int(posicion[2])])
+        formato_lista_from_csv.append([int(posicion[0]), int(posicion[1]),int(posicion_escaneada)])
         # se almacena vector de cada espacio en matriz
-
-# for fila in range(len(grid_master[0])):
-#     print("matriz:", grid_espacial[fila])
 
 
 #Almacenamiento en matriz correcta
 
 # Recorre la grid una por una para obtener los datos y entonces hacer el 
-# recorrido según cordenadas estraidas de vectores
+# recorrido según coordenadas extraidas de vectores
 for columna in range(len(grid_master[0])):
     for fila in range(len(grid_master)):
         posicion=grid_master[fila][columna]
         matriz_correcta[fila][columna]=int(posicion[2])
 
-# for fila in range(len(grid_master[0])):
-#     print("matriz:", matriz_correcta[fila])
 
 #####################################################################
 
@@ -230,6 +229,7 @@ def obtener_posicion(CR,CA,CY,CB):
         posicion = 4
         return posicion
 
+
 #En caso de que la pimera posicion se encuentre en la matriz Blanca escaneada, esta
 #funcion pasa esa poscion al ultimo indice
 def objeto_vacio(CB,Xi):
@@ -240,6 +240,7 @@ def objeto_vacio(CB,Xi):
             indice.append(i)
     borrar_escaneado(CB,indice)
     CB.append(Xi)
+
 
 #va descartando los valores que se encuentran correctamente
 #busca los indices de los valores correctosd entre la amtriz correcta y la matriz escaneada y llama borrar_valor
@@ -267,7 +268,6 @@ def borrar_correcto(M,indice):
 def borrar_escaneado(M,indice):
     for x in range(len(indice)):
         del M[indice[x]]
-
 
 
 #Esta funcion es para ir viendo los valores en los array
@@ -368,7 +368,7 @@ def movimientos_modo_espacios_ceros():
 def Modo_Reacomodo():
     descubrir_bandera()
     if bandera_vacio[0] == 0:
-        #print("modo sin espacios \n")
+        print("modo sin espacios \n")
         C_Rojo.clear()
         C_Azul.clear()
         C_Amarillo.clear()
@@ -423,8 +423,3 @@ def Modo_Patron():
             break
         maximo = maximo + 1
 
-
-Modo_Reacomodo()        
-
-
-    
