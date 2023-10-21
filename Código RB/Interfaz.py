@@ -1,21 +1,106 @@
 #cambios para comprobar 2 branch
-
 import pygame, sys
 import random
 
-# Tamaño de Pantalla
-pantalla_X = 900
-pantalla_Y = 600
-
-pygame.init()
-
-pygame.display.set_caption("Grúa Pórtico")
-
-resolucion = (pantalla_X,pantalla_Y)
 reloj = pygame.time.Clock()
 
-ventana = pygame.display.set_mode(resolucion)
+rojo = (255,0,0)
+verde = (0,255,0)
+azul = (0,0,255)
+blanco = (255,255,255)
+ 
+diccionario = {1:rojo, 2:azul, 3:verde, 4:blanco}
 
+
+#Clase para creación de pantalla y poder ingresarle datos desde main
+class Pantalla(object):
+	def __init__(self,Pantalla_X, Pantalla_Y):
+		pygame.init()
+		
+		pygame.display.set_caption("Grúa Pórtico")
+		
+		self.pantalla_X = Pantalla_X
+		self.pantalla_Y = Pantalla_Y
+		self.resolucion = (self.pantalla_X,self.pantalla_Y)
+		
+		self.ventana = pygame.display.set_mode(self.resolucion)
+
+		self.matriz = []
+	
+	# Función que dibuja los elementos en pantalla
+	def dibujar_pantalla(self):
+		self.ventana.fill((204,204,204)) # Fondo blanco
+
+		# Espaciado matriz
+		eje_x = 210
+		eje_y = 50
+
+		# Matriz
+		for i in range (6):
+			pygame.draw.line(self.ventana, rojo, [eje_x+(100*(i)),eje_y], [eje_x+(100*(i)),eje_y+500],4) # verticales
+			pygame.draw.line(self.ventana, rojo, [eje_x,eje_y+(100*i)], [eje_x+500,eje_y+(100*i)],4) # horizontales
+
+		# Cuadro de carga
+		pygame.draw.line(self.ventana, rojo, [10,250], [10, 350],4)
+		pygame.draw.line(self.ventana, rojo, [110,250], [110, 350],4)
+		pygame.draw.line(self.ventana, rojo, [10,250], [110,250],4)
+		pygame.draw.line(self.ventana, rojo, [10,350], [110,350],4)
+
+		# Dibuja Pieza
+		pieza.draw(self.ventana)
+
+		# Recorrer la matriz dibujando los circulos previos 
+		for i in range (len(self.matriz)): 
+			pygame.draw.circle(self.ventana,diccionario[self.matriz[i][2]], (((self.matriz[i][0]*100)+(160)),((self.matriz[i][1]*100))), 30)
+		
+		pygame.display.flip() # Refrescar pantalla
+
+	def ejecutar(self,Direccion_X,Direccion_Y,M_Master):
+		global pieza
+
+		# Direcciónes que se indican al ejecutar pantalla, ahi deben de ir los circulos
+		self.Direcion_X = Direccion_X
+		self.Direcion_Y = Direccion_Y
+		self.matriz = M_Master				
+
+		while True:
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT: # Cerrar ventana
+					sys.exit()
+
+				if event.type == pygame.KEYDOWN: # Si aprieto una tecla 
+
+					# Asigna los valores objetivo para mover circuos
+					if event.key == pygame.K_m:
+						pieza.Objetivo_X = self.Direcion_X
+						pieza.Objetivo_Y = self.Direcion_Y
+
+					if event.key == pygame.K_SPACE: # Si coloco nuevo objeto
+
+						self.matriz.append([pieza.Objetivo_X, pieza.Objetivo_Y, pieza.Color]) # Meto sus datos en lista
+
+						# Ubicación y dirección de pieza
+						Circulo_X = 60
+						Circulo_Y = 300
+						Objetivo_X = -1
+						Objetivo_Y = 3
+						
+						Color = random.randint(1,3)
+						
+						pieza = Circulo(Circulo_X,Circulo_Y,Color,Objetivo_X,Objetivo_Y)				
+
+					if event.key == pygame.K_e: # Si presiono e
+					
+						self.matriz = []
+
+			self.dibujar_pantalla()
+
+			pieza.Posicionamiento()
+
+			reloj.tick(60) # FPS
+
+
+# Clase para objeto que se va a mover
 class Circulo(object):
 	def __init__(self,Circulo_X,Circulo_Y,Color,Objetivo_X,Objetivo_Y):
 		# Ubicación y tamaño de círculo
@@ -25,10 +110,12 @@ class Circulo(object):
 		self.Objetivo_Y = Objetivo_Y
 		self.Color = Color
 	
+	# Dibuja el circulo según posicionamiento
 	def draw(self, ventana):
 		# Dibujar circulo actual
 		pygame.draw.circle(ventana, diccionario[self.Color], (self.Circulo_X, self.Circulo_Y), 30)
 
+	# Ubica el circulo en el espacio
 	def Posicionamiento(self):
 		#########################
 		Destino_X = (self.Objetivo_X*100)+(160) # Expresion matemática para moverse entre centros (no pregunten como la saqué)
@@ -49,119 +136,29 @@ class Circulo(object):
 		if (self.Circulo_Y < Destino_Y):
 			self.Circulo_Y += 5
 
-def redraw():
-	ventana.fill((204,204,204)) # Fondo blanco
-
-	# Espaciado matriz
-	eje_x = 210
-	eje_y = 50
-
-	# Matriz
-	for i in range (6):
-		pygame.draw.line(ventana, rojo, [eje_x+(100*(i)),eje_y], [eje_x+(100*(i)),eje_y+500],4) # verticales
-		pygame.draw.line(ventana, rojo, [eje_x,eje_y+(100*i)], [eje_x+500,eje_y+(100*i)],4) # horizontales
-
-	# Cuadro de carga
-	pygame.draw.line(ventana, rojo, [10,250], [10, 350],4)
-	pygame.draw.line(ventana, rojo, [110,250], [110, 350],4)
-	pygame.draw.line(ventana, rojo, [10,250], [110,250],4)
-	pygame.draw.line(ventana, rojo, [10,350], [110,350],4)
-
-	# Dibuja Pieza
-	pieza.draw(ventana)
-	# Recorrer la matriz dibujando los circulos previos 
-	for i in range (len(matriz)): 
-		pygame.draw.circle(ventana,diccionario[matriz[i][2]], (((matriz[i][0]*100)+(160)),((matriz[i][1]*100))), 30)
-	
-	pygame.display.update() # Refrescar pantalla
-
-rojo = (255, 0, 0)
-verde = (0, 255, 0)
-azul = (0, 0, 255)
- 
-diccionario = {0:rojo, 1:verde, 2:azul}
-
-matriz=[]
 
 # Ubicación y dirección de pieza
 Circulo_X = 60
 Circulo_Y = 300
 Objetivo_X = -1
 Objetivo_Y = 3
-Color = random.randint(0,2) # color inicial
+Color = random.randint(1,3) # color inicial
 
 pieza = Circulo(Circulo_X,Circulo_Y,Color,Objetivo_X,Objetivo_Y)
 
-eliminar = 0
-Par_ordenado = 0
+# Quitar comentarios si se quiere probar
 
-while True:
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT: # Cerrar ventana
-			sys.exit()
-		
-		if event.type == pygame.KEYDOWN: # Si aprieto una tecla (K_1 = casilla 1 y así)
+# # Tamaño de Pantalla
+# pantalla_X = 900
+# pantalla_Y = 600
 
-			if event.key == pygame.K_1:
-				if Par_ordenado == 0: # Pensada para X
-					pieza.Objetivo_X = 1
-				else:				  # Pensada para Y (Cambian con tab)
-					pieza.Objetivo_Y = 1
+# # creacion de objeto pantalla
+# pantalla = Pantalla(pantalla_X,pantalla_Y)
 
-			if event.key == pygame.K_2:
-				if Par_ordenado == 0:
-					pieza.Objetivo_X = 2
-				else:
-					pieza.Objetivo_Y = 2
+# # Manda coordenada, que se asigna al presionar m
+# pantalla.ejecutar(4,4)
 
-			if event.key == pygame.K_3:
-				if Par_ordenado == 0:
-					pieza.Objetivo_X = 3
-				else:
-					pieza.Objetivo_Y = 3
+# se sigue guardando con el espacio
 
-			if event.key == pygame.K_4:
 
-				if Par_ordenado == 0:
-					pieza.Objetivo_X = 4
-				else:
-					pieza.Objetivo_Y = 4
 
-			if event.key == pygame.K_5:
-
-				if Par_ordenado == 0:
-					pieza.Objetivo_X = 5
-				else:
-					pieza.Objetivo_Y = 5
-
-			if event.key == pygame.K_TAB: # Si aprieto TAB
-
-				if Par_ordenado == 0: # Cambio de coordenada
-					Par_ordenado = 1
-				else:
-					Par_ordenado = 0
-
-			if event.key == pygame.K_SPACE: # Si coloco nuevo objeto
-
-				matriz.append([pieza.Objetivo_X, pieza.Objetivo_Y, pieza.Color]) # Meto sus datos en lista
-
-				# Ubicación y dirección de pieza
-				Circulo_X = 60
-				Circulo_Y = 300
-				Objetivo_X = -1
-				Objetivo_Y = 3
-				
-				Color = random.randint(0,2)
-				
-				pieza = Circulo(Circulo_X,Circulo_Y,Color,Objetivo_X,Objetivo_Y)				
-
-			if event.key == pygame.K_e: # Si presiono e
-			
-				# del matriz[0]
-				matriz = []
-
-	redraw()
-
-	pieza.Posicionamiento()
-
-	reloj.tick(60) # FPS

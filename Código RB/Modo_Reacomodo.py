@@ -16,7 +16,7 @@ C_Amarillo = []
 C_Blanco = []
 
 #Array Movimientos a realizar
-Movimientos_grua = [[5,5]]
+Movimientos_grua = [[-1,3]]
 
 
 #Matriz de la posición en el espacio 5x5
@@ -61,6 +61,7 @@ matriz_escaneada = [[3, 2, 1, 1, 3],
 
 # lectura de csv y asignación de posiciones y tipo
 grid_master=[]
+formato_lista=[]
 grid_master=lectura_csv.lectura_csv()
 # Recorre la grid una por una para obtener los datos y entonces hacer el 
 # recorrido según cordenadas estraidas de vectores
@@ -68,13 +69,14 @@ for columna in range(len(grid_master[0])):
     for fila in range(len(grid_master)):
         posicion=grid_master[fila][columna]
         grid_espacial[fila][columna]=[int(posicion[0]), int(posicion[1])]
+        formato_lista.append([int(posicion[0]), int(posicion[1]),int(posicion[2])])
         # se almacena vector de cada espacio en matriz
 
-for fila in range(len(grid_master[0])):
-    print("matriz:", grid_espacial[fila])
+# for fila in range(len(grid_master[0])):
+#     print("matriz:", grid_espacial[fila])
 
 
-#Almacenamiento en matri correcta
+#Almacenamiento en matriz correcta
 
 # Recorre la grid una por una para obtener los datos y entonces hacer el 
 # recorrido según cordenadas estraidas de vectores
@@ -83,9 +85,8 @@ for columna in range(len(grid_master[0])):
         posicion=grid_master[fila][columna]
         matriz_correcta[fila][columna]=int(posicion[2])
 
-for fila in range(len(grid_master[0])):
-    print("matriz:", matriz_correcta[fila])
-
+# for fila in range(len(grid_master[0])):
+#     print("matriz:", matriz_correcta[fila])
 
 
 #Orden ascendente de la posicion en la matriz para los distintos objetos 
@@ -268,5 +269,5 @@ def Modo_Reacomodo():
     eliminar_valor(C_Amarillo,Color_Amarillo)
     eliminar_valor(C_Blanco,Color_Blanco)
     lista_de_movimientos(C_Rojo,Color_Rojo,C_Azul,Color_Azul,C_Amarillo,Color_Amarillo,C_Blanco,Color_Blanco)
-    return Movimientos_grua
+    return Movimientos_grua, matriz_escaneada, matriz_correcta, formato_lista
     #mover_objeto(Movimientos_grua)
