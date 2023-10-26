@@ -1,7 +1,7 @@
 import serial
 #import time
 
-ser = serial.Serial("/dev/ttyACM0", 2000000)   # Serial port on Raspberry Pi
+ser = serial.Serial("/dev/ttyACM0", 115200)   # Serial port on Raspberry Pi
 
 instrucciones = {
     "color"   : b'\x01',
@@ -10,6 +10,9 @@ instrucciones = {
     "motorXX" : b'\x04',
     "motorYY" : b'\x05'
     }
+
+ins = input("Indique la instrucción: ")
+
 
 def recibirUART(instruccion):
     transmitirUART(instruccion)

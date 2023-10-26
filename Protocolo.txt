@@ -9,10 +9,11 @@ Asi, las comunicaciones necesarias son las siguientes:
 El STM32 estará constantemente esperando una señal del RBP, por lo que el que comienza la comunicación es el master. Entonces, se propone el siguiente protocolo:
 1. Envía instrucción.
 	0x01	->	Sensor color
-	0x02	->	Electroimán ON
-	0x03	->	Electroimán OFF
-	0x04	->	Motor xx
-	0x05	->	Motor yy
+	0x02	->	Sensor distancia
+	0x03	->	Electroimán ON
+	0x04	->	Electroimán OFF
+	0x05	->	Motor xx
+	0x06	->	Motor yy
 
 2. Para los sensores, master no enviará nada, si no que esperará una señal del slave.
 	a. Color: Recibirá tres señales seguidas de dos bytes, correspondientes a las señales R, G y B.
