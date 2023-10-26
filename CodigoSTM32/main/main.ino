@@ -4,11 +4,6 @@
   Su función es brindarle la información que el RBP le solicite.
 
 */
-// LIBRERÍAS
-#include <Wire.h>
-#include <SparkFunISL29125.h>
-#include <HCSR04.h>
-
 // VARIABLES GLOBALES
 unsigned int rgb[3];  // lista global con valores RGB medidos del sensor de color
 float distancia;      // variable global para almacenar distancia medida con sensor ultrasónico
@@ -24,7 +19,6 @@ void setup() {
   SerialPi.begin(115200);       // Inicio la transmisión de datos con una velocidad alta (2 MBaudios)
   Serial.begin(115200);   // Monitor serial para debugging
   setup_sensores();
-  //setup_uart();
 }
 
 void loop() {

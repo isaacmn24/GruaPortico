@@ -8,6 +8,11 @@
 
   Aqui no se hace comunicación con el Raspberry pi, solamente se mide el sensor solicitado.
 */
+// LIBRERÍAS
+#include <Wire.h>
+#include <SparkFunISL29125.h>
+#include <HCSR04.h>
+
 // GPIO; UTILIZAR DEFINE
 #define triggerPin PB1
 #define echoPin PB0
