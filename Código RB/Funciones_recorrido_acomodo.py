@@ -8,7 +8,6 @@ def movimientos(m_movimientos,c_recorrido):
     
     M_movimientos = m_movimientos
     Recorrido = c_recorrido
-
     coordenadas_i = M_movimientos[Recorrido+1]
     coordenadas_f = M_movimientos[Recorrido]
     

@@ -1,5 +1,6 @@
 #cambios para comprobar 2 branch
 import pygame, sys
+import pyautogui
 import Funciones_recorrido_acomodo
 
 reloj = pygame.time.Clock()
@@ -106,6 +107,9 @@ class Pantalla(object):
 							# Direcciónes que se indican al ejecutar pantalla, ahi deben de ir los circulos
 							self.Direcion_X = coordenadas_f[0]
 							self.Direcion_Y = coordenadas_f[1]
+						else:
+							pyautogui.alert("Fin Reacomodo")
+
 					
 					if event.key == pygame.K_e: # Si presiono e
 					
@@ -117,10 +121,11 @@ class Pantalla(object):
 
 			reloj.tick(60) # FPs
 
-	def pre_ejecucion(self,):
+	def pre_ejecucion(self):
 		matriz_movimientos, Matrix, coordenadas_i, coordenadas_f = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido)
 		M_master = Matrix
 		self.ejecutar(coordenadas_i[0],coordenadas_i[1],coordenadas_f[0],coordenadas_f[1],M_master, matriz_movimientos)
+
 
 # Clase para objeto que se va a mover
 class Circulo(object):

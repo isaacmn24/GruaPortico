@@ -43,17 +43,18 @@ grid_espacial = [[[0,0], [1,0], [2,0], [3,0], [4,0]],
 #Archivo excel donde viene la posición de los objetos correctamente
 matriz_correcta = [[1, 3, 1, 2, 1],
                    [1, 2, 3, 3, 1],
-                   [3, 1, 3, 1, 2],
-                   [2, 2, 1, 4, 3],
+                   [3, 1, 4, 1, 2],
+                   [2, 2, 1, 3, 3],
                    [1, 2, 1, 2, 2]]
-
+# 7 color rojo
 # 5 color azul
 # 5 color amarillo
 
+
 #Esta matriz se consigue escaneando la matriz 5x5
-matriz_escaneada = [[3, 1, 4, 4, 1],
+matriz_escaneada = [[3, 1, 4, 4, 4],
                     [3, 2, 2, 2, 1],
-                    [3, 4, 4, 3, 1],
+                    [3, 4, 1, 3, 1],
                     [1, 2, 4, 1, 4],
                     [4, 1, 2, 3, 4]]
 # 8 color rojo
@@ -265,13 +266,14 @@ def descubrir_bandera():
                 if matriz_correcta[i][j] != matriz_escaneada[i][j]:
                     bandera_vacio[0] = 1
 
-matriz_ayuda = []
+matriz_ayuda = [] #matriz escaneada para realizar cambios con matriz escopia
 matriz_esccopia = []
 matriz_corcopia = []
 coordenadas = []
 Movimiento_1 = []
 Movimiento_2 = []
 son_igual = [0]
+cantidad_correcta = [0]
 
 
 def hacer_listas(M,Copia):
@@ -306,10 +308,20 @@ def modo_espVacio():
                                 matriz_ayuda[cont_copia] = 4
                                 seguir = j
                                 break 
-    
+
+
+def cantidad_de_objetos():
+    num = 1
+    filas = len(matriz_esccopia)
+    for i in range(filas):
+        if 4 != matriz_esccopia[i]:
+            num = num + 1
+    cantidad_correcta[0] = num
+
+
 #Realiza ciclos hasta que se haya completado de ordenar la matriz
 def ciclo():
-    while 24 > son_igual[0]:
+    while cantidad_correcta[0] > son_igual[0]:
         modo_espVacio()
         intercambio()
         son_iguales()
@@ -331,7 +343,7 @@ def movimientos_modo_espacios_ceros():
     
 #Llamar Modo Reacomodo o Patron
 def Modo_Reacomodo():
-    descubrir_bandera()
+    descubrir_bandera() 
     if bandera_vacio[0] == 0:
         print("modo sin espacios \n")
         C_Rojo.clear()
@@ -355,6 +367,7 @@ def Modo_Reacomodo():
         hacer_listas(matriz_escaneada,matriz_ayuda)
         hacer_listas(grid_espacial,coordenadas)
         son_iguales()
+        cantidad_de_objetos()
         ciclo()
         movimientos_modo_espacios_ceros()
         bandera_vacio[0] = 0
@@ -388,8 +401,5 @@ def Modo_Patron():
         maximo = maximo + 1
 
 
-        
 Modo_Reacomodo()
-
-
     
