@@ -38,8 +38,15 @@ void leerColores(unsigned int *rgb)
   rgb[2] = RGB_sensor.readBlue();   // Leer azul
 }
 
-float leerDistancia()
+bool alarmaDistancia()
 {
-  return ultrasonic_sensor.measureDistanceCm();
+  if (ultrasonic_sensor.measureDistanceCm() < 20){
+    return 1;
+  }
+  else{
+    return 0;
+  }
+
 }
+
 
