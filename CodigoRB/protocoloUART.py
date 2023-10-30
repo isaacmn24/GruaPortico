@@ -5,13 +5,14 @@ ser = serial.Serial("/dev/ttyACM0", 115200)   # Serial port on Raspberry Pi
 
 instrucciones = {
     "color"   : b'\x01',
-    "imanON"  : b'\x02',
-    "imanOFF" : b'\x03',
-    "motorXX" : b'\x04',
-    "motorYY" : b'\x05'
+    "distancia"   : b'\x02',
+    "imanON"  : b'\x03',
+    "imanOFF" : b'\x04',
+    "motorXX" : b'\x05',
+    "motorYY" : b'\x06'
     }
 
-ins = input("Indique la instrucción: ")
+ins = str(input("Indique la instrucción: "))
 
 
 def recibirUART(instruccion):

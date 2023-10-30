@@ -1,42 +1,37 @@
+// LIBRERÍAS
 #include "sensores.h"
 #include "comunicacion.h"
 
-int MotorX = 0;
-int MotorY = 0;
-int PinDir = 0;
-int PulRev = 0;
-int Vel = 0; //DelayMicroseconds - 50 funciona "bien"
-int Distancia = 0; // cm
+// GPIO
+#define pinMotorX PA1
+#define pinMotorY PA2
+#define pinDirMotores PA3
+#define pinIman PA4
+#define pinCalibrarX PA5
+#define pinCalibrarY PA6
+
+// CONSTANTES DEL MOTOR
+int PulRev = 6400;    // Pulsos por revolución
+int Vel = 50;         // DelayMicroseconds - 50 funciona "bien"
+int Distancia = 0;    // Distancia en cm entre las casillas de elementos
 float RelRevTras = 0; // 1 revolución = ? cm lineales
 
 //Para mover motores
 bool X, Derecha, Abajo = 1; //No se si será así, hay que probar en planta
 bool Y, Izquierda, Arriba = 0;
 
-int PinIman = 0;
-
-void ConfigurarMotores(int PinMotorX, int PinMotorY, int PinDireccion, float RelacionRevTras, int PulsosRev, int Velocidad, int DistanciaEntreEspacios){
-  MotorX = PinMotorX;
-  MotorY = PinMotorY;
-  PinDir = PinDireccion;
-  PulRev = PulsosRev;
-  RelRevTras = RelacionRevTras;
-  Vel = Velocidad;
-  Distancia = DistanciaEntreEspacios;
-}
-
-void CalibrarCero(int CalibrarX, int CalibrarY){
-  digitalWrite(PinDir, 0); //Izquierda y arriba
-  while(digitalRead(CalibrarX) == 0){
-    digitalWrite(MotorX, HIGH); 
+void CalibrarCero(){
+  digitalWrite(pinDirMotores, 0); //Izquierda y arriba
+  while(digitalRead(pinCalibrarX) == 0){
+    digitalWrite(pinMotorX, HIGH); 
     delayMicroseconds(Vel); 
-    digitalWrite(MotorX, LOW); 
+    digitalWrite(pinMotorX, LOW); 
     delayMicroseconds(Vel);
   }
-  while(digitalRead(CalibrarY) == 0){
-    digitalWrite(MotorY, HIGH); 
+  while(digitalRead(pinCalibrarY) == 0){
+    digitalWrite(pinMotorY, HIGH); 
     delayMicroseconds(Vel); 
-    digitalWrite(MotorY, LOW); 
+    digitalWrite(pinMotorY, LOW); 
     delayMicroseconds(Vel);
   }
 }
@@ -53,7 +48,7 @@ void MoverMotor(int Motor, int Nivel, bool Direccion){
     Tipo = MotorY;
   }
 
-  digitalWrite(PinDir, Direccion); // Enables the motor to move in a particular direction
+  digitalWrite(pinDirMotores, Direccion); // Enables the motor to move in a particular direction
   for(int x = 0; x < cantPulsos; x++) {
     digitalWrite(Tipo, HIGH); 
     delayMicroseconds(Vel); 
@@ -83,16 +78,12 @@ void EscaneoGeneral(){ //Asumiendo inicio en esquina superior izquierda
   MoverMotor(Y, 4, Arriba);
 }
 
-void ConfigurarIman(int Pin){
-  PinIman = Pin;
-}
-
 void ApagarIman(){
-  digitalWrite(PinIman, 0);
+  digitalWrite(pinIman, 0);
 }
 
 void EncenderIman(){
-  digitalWrite(PinIman, 1);
+  digitalWrite(pinIman, 1);
 }
 
 void ConfigurarPiston(){

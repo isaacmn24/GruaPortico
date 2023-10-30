@@ -1,8 +1,11 @@
 #include "actuadores.h"
+#include "sensores.h"
+#include "comunicacion.h"
 bool DireccionX;
 uint8_t NivelesX;
 bool DireccionY;
 uint8_t NivelesY;
+int colorLeido;
 
 int X = 1;
 int Y = 0;
@@ -11,10 +14,7 @@ void setup() {
   SerialPi.begin(115200); 
   Serial.begin(115200);
 
-  ConfigurarIman(int Pin);
-
-  ConfigurarMotores(int PinMotorX, int PinMotorY, int PinDireccion, float RelacionRevTras, int PulsosRev, int Velocidad, int DistanciaEntreEspacios);
-  CalibrarCero(int CalibrarX, int CalibrarY){ //Pines de los switches
+  CalibrarCero(); //Pines de los switches
 
   setup_sensores();
 }
@@ -28,7 +28,7 @@ void loop() {
   else{
     MoverMotor(X, NivelesX, DireccionX); // Moverse desde 0,0 al almacen (depende de donde se ponga)
     MoverMotor(Y, NivelesY, DireccionY);
-    Patron()
+    Patron();
   }
 }
 
@@ -69,8 +69,8 @@ void Patron(){
     delay(3000);
 
     BajarPiston();
-    leerColores();
-    EnviarColor();
+    colorLeido = leerColores();
+    EnviarColor(colorLeido);
 
     EsperarInformacion();
     SegmentarInformacion(); //A donde voy?

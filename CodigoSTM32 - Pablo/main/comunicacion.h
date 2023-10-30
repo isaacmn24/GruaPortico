@@ -32,7 +32,7 @@ bool RecibirFin(){
   return datoModo;
 }
 
-void EnviarColor(){
+void EnviarColor(int color){
 
 }
 
