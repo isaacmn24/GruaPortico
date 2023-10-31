@@ -118,7 +118,6 @@ bool alarmaDistancia()
   else{
     return 0;
   }
-
 }
 
 

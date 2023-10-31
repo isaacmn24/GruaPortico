@@ -3,10 +3,10 @@
 //#include "comunicacion.h"
 
 // GPIO
-#define pinMotorX PA1
-#define pinMotorY PA2
-#define pinDirMotores PA3
-#define pinIman PA4
+#define pinMotorX PA3
+#define pinMotorY PA4
+#define pinDirMotores PA1
+#define pinIman PB2
 #define pinCalibrarX PA5
 #define pinCalibrarY PA6
 

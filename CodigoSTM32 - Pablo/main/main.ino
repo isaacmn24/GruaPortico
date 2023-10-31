@@ -15,14 +15,14 @@ void setup() {
   SerialPi.begin(115200); 
   Serial.begin(115200);
 
-  CalibrarCero(); //Pines de los switches
+  CalibrarCero();
 
   setup_sensores();
 }
 
 void loop() {
   EsperarInformacion();
-  if (RecibirModo() == 1){  
+  if (RecibirModo()){  
     EscaneoGeneral();
     Reacomodo();
   }
@@ -65,7 +65,7 @@ void Reacomodo(){
 }
 
 void Patron(){
-  //Legué al almacen
+  //Llegué al almacen
   while (RecibirFin() == 0){
     delay(3000);
 
