@@ -58,7 +58,7 @@ class Pantalla(object):
 		pygame.display.flip() # Refrescar pantalla
 		
 
-	def ejecutar(self, Posicion_XY, Direccion_XY, color, M_Master, M_movimientos):
+	def ejecutar(self, Posicion_XY, Direccion_XY, color, M_Master, M_movimientos, Modo_operacion):
 
 		global pieza
 		
@@ -91,10 +91,13 @@ class Pantalla(object):
 
 						self.matriz.append([pieza.Objetivo_X, pieza.Objetivo_Y, pieza.Color]) # Meto sus datos en lista
 						self.M_recorrido = self.M_recorrido + 1
-					
+
+						if Modo_operacion == 'conesp':
+							self.M_recorrido = self.M_recorrido + 1
 						
 						if (self.M_recorrido) < (len(M_movimientos)-1):
-							movs, matrix, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido)
+							print(self.M_recorrido,len(M_movimientos)-1)
+							modo, movs, matrix, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido)
 
 							Objetivo_X = coordenadas_i[0]
 							Objetivo_Y = coordenadas_i[1]
@@ -122,9 +125,9 @@ class Pantalla(object):
 			reloj.tick(60) # FPS
 
 	def pre_ejecucion(self):
-		matriz_movimientos, Matrix, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido)
+		Modo_op, matriz_movimientos, Matrix, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido)
 		M_master = Matrix
-		self.ejecutar(coordenadas_i,coordenadas_f, color, M_master, matriz_movimientos)
+		self.ejecutar(coordenadas_i,coordenadas_f, color, M_master, matriz_movimientos, Modo_op)
 
 
 # Clase para objeto que se va a mover
