@@ -11,6 +11,9 @@ posiciones_correctas = []
 #bandera que verifica que la matriz ya esta ordenada correctamente
 bandera = [0]
 
+# variable que indica cual modo de reacomodo se esta realizando.
+modo = '' 
+
 #array para la posición de los colores escaneados en la matriz espacial
 Color_Rojo = []
 Color_Azul = []
@@ -80,7 +83,7 @@ for columna in range(len(grid_master[0])):
         posicion=grid_master[fila][columna]
         posicion_escaneada=matriz_escaneada[fila][columna]
         grid_espacial[fila][columna]=[int(posicion[0]), int(posicion[1])]
-        formato_lista_from_csv.append([int(posicion[0]), int(posicion[1]),int(posicion_escaneada)])
+        formato_lista_from_csv.append([int(posicion[0]), int(posicion[1]), int(posicion_escaneada)])
         # se almacena vector de cada espacio en matriz
 
 
@@ -382,6 +385,7 @@ def Modo_Reacomodo():
     descubrir_bandera()
     if bandera_vacio[0] == 0:
         print("modo sin espacios \n")
+        modo = 'sinesp'
         C_Rojo.clear()
         C_Azul.clear()
         C_Amarillo.clear()
@@ -396,10 +400,11 @@ def Modo_Reacomodo():
         lista_de_movimientos(C_Rojo,Color_Rojo,C_Azul,Color_Azul,C_Amarillo,Color_Amarillo,C_Blanco,Color_Blanco)
         Movimientos_grua[(len(Movimientos_grua))-1] = Movimientos_grua[0]
         print(Movimientos_grua)
-        return Movimientos_grua, matriz_escaneada, matriz_correcta, formato_lista_from_csv
+        return modo, Movimientos_grua, matriz_escaneada, matriz_correcta, formato_lista_from_csv
         #mover_objeto(Movimientos_grua)
     else:
         print("modo espacios vacios \n")
+        modo = 'conesp'
         hacer_listas(matriz_correcta,matriz_corcopia)
         hacer_listas(matriz_escaneada,matriz_esccopia)
         hacer_listas(matriz_escaneada,matriz_ayuda)
@@ -410,7 +415,7 @@ def Modo_Reacomodo():
         movimientos_modo_espacios_ceros()
         bandera_vacio[0] = 0
         print(Movimientos_grua)
-        return Movimientos_grua, matriz_escaneada, matriz_correcta, formato_lista_from_csv
+        return modo, Movimientos_grua, matriz_escaneada, matriz_correcta, formato_lista_from_csv
 
 def Modo_Patron():
     C_Rojo.clear()

@@ -58,22 +58,22 @@ class Pantalla(object):
 		pygame.display.flip() # Refrescar pantalla
 		
 
-	def ejecutar(self,Posicion_X,Posicion_Y,Direccion_X,Direccion_Y,M_Master,M_movimientos):
+	def ejecutar(self, Posicion_XY, Direccion_XY, color, M_Master, M_movimientos):
 
 		global pieza
 		
-		Objetivo_X = Posicion_X
-		Objetivo_Y = Posicion_Y
+		# Direcciónes que se indican al ejecutar pantalla, ahi deben de ir los circulos
+		self.Direcion_X = Direccion_XY[0]
+		self.Direcion_Y = Direccion_XY[1]
+		self.matriz = M_Master
+
+		Objetivo_X = Posicion_XY[0]
+		Objetivo_Y = Posicion_XY[1]
 		Circulo_X = (Objetivo_X*100)+(160)
 		Circulo_Y = (Objetivo_Y*100)
-		Color = 1
+		Color = color
 
-		pieza = Circulo(Circulo_X,Circulo_Y,Color,Objetivo_X,Objetivo_Y)
-
-		# Direcciónes que se indican al ejecutar pantalla, ahi deben de ir los circulos
-		self.Direcion_X = Direccion_X
-		self.Direcion_Y = Direccion_Y
-		self.matriz = M_Master	
+		pieza = Circulo(Circulo_X,Circulo_Y,Color,Objetivo_X,Objetivo_Y)	
 
 		while True:
 			for event in pygame.event.get():
@@ -94,13 +94,13 @@ class Pantalla(object):
 					
 						
 						if (self.M_recorrido) < (len(M_movimientos)-1):
-							movs, matrix, coordenadas_i, coordenadas_f = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido)
+							movs, matrix, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido)
 
 							Objetivo_X = coordenadas_i[0]
 							Objetivo_Y = coordenadas_i[1]
 							Circulo_X = (Objetivo_X*100)+(160)
 							Circulo_Y = (Objetivo_Y*100)
-							Color = 1
+							Color = color
 
 							pieza = Circulo(Circulo_X,Circulo_Y,Color,Objetivo_X,Objetivo_Y)
 
@@ -119,12 +119,12 @@ class Pantalla(object):
 
 			pieza.Posicionamiento()
 
-			reloj.tick(60) # FPs
+			reloj.tick(60) # FPS
 
 	def pre_ejecucion(self):
-		matriz_movimientos, Matrix, coordenadas_i, coordenadas_f = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido)
+		matriz_movimientos, Matrix, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido)
 		M_master = Matrix
-		self.ejecutar(coordenadas_i[0],coordenadas_i[1],coordenadas_f[0],coordenadas_f[1],M_master, matriz_movimientos)
+		self.ejecutar(coordenadas_i,coordenadas_f, color, M_master, matriz_movimientos)
 
 
 # Clase para objeto que se va a mover
