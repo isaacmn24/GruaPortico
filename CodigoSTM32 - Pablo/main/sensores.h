@@ -18,9 +18,6 @@
 #define sensorColor_S3 PB13
 #define sensorColor_salida PB14
 
-// SENSOR DE DISTANCIA
-UltraSonicDistanceSensor ultrasonic_sensor(triggerPin, echoPin);
-
 // GUARDAR FRECUENCIAS Y VALORES RGB
 int frecuenciaRojo = 0;
 int frecuenciaVerde = 0;
@@ -36,6 +33,9 @@ void setup_sensores() {
   
   // Definiendo salidaSensor como entrada
   pinMode(sensorColor_salida, INPUT);
+
+  // Sensor ultrasónico
+  HCSR04.begin(triggerPin, echoPin);
 }
 
 /*
@@ -112,7 +112,7 @@ int leerColores()
 
 bool alarmaDistancia()
 {
-  if (ultrasonic_sensor.measureDistanceCm() < 20){
+  if (HCSR04.measureDistanceCm()[0] < 20){
     return 1;
   }
   else{

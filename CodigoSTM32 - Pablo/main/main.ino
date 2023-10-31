@@ -1,14 +1,15 @@
-#include "actuadores.h"
-#include "sensores.h"
 #include "comunicacion.h"
+#include "sensores.h"
+#include "actuadores.h"
+
 bool DireccionX;
 uint8_t NivelesX;
 bool DireccionY;
 uint8_t NivelesY;
 int colorLeido;
 
-int X = 1;
-int Y = 0;
+bool motorX = 1;
+bool motorY = 0;
 
 void setup() {
   SerialPi.begin(115200); 
@@ -26,8 +27,8 @@ void loop() {
     Reacomodo();
   }
   else{
-    MoverMotor(X, NivelesX, DireccionX); // Moverse desde 0,0 al almacen (depende de donde se ponga)
-    MoverMotor(Y, NivelesY, DireccionY);
+    MoverMotor(motorX, NivelesX, DireccionX); // Moverse desde 0,0 al almacen (depende de donde se ponga)
+    MoverMotor(motorY, NivelesY, DireccionY);
     Patron();
   }
 }
@@ -37,8 +38,8 @@ void Reacomodo(){
     EsperarInformacion(); //Bucle infinito, se rompe al recibir informacion
     SegmentarInformacion(); // Me dice quien es NivelesXY y DireccionXY
 
-    MoverMotor(X, NivelesX, DireccionX);
-    MoverMotor(Y, NivelesY, DireccionY);
+    MoverMotor(motorX, NivelesX, DireccionX);
+    MoverMotor(motorY, NivelesY, DireccionY);
 
     delay(3000);
 
@@ -52,8 +53,8 @@ void Reacomodo(){
     EsperarInformacion();
     SegmentarInformacion();
 
-    MoverMotor(X, NivelesX, DireccionX);
-    MoverMotor(Y, NivelesY, DireccionY);
+    MoverMotor(motorX, NivelesX, DireccionX);
+    MoverMotor(motorY, NivelesY, DireccionY);
 
     delay(3000);
 
@@ -79,8 +80,8 @@ void Patron(){
     delay(3000);
     SubirPiston();
 
-    MoverMotor(X, NivelesX, DireccionX); //Voy al destino
-    MoverMotor(Y, NivelesY, DireccionY);
+    MoverMotor(motorX, NivelesX, DireccionX); //Voy al destino
+    MoverMotor(motorY, NivelesY, DireccionY);
 
     delay(3000);
 
@@ -88,7 +89,16 @@ void Patron(){
     ApagarIman();
     SubirPiston();
 
-    MoverMotor(X, NivelesX, !DireccionX); //Me regreso (notese que tienen exclamacion)
-    MoverMotor(Y, NivelesY, !DireccionY);
+    MoverMotor(motorX, NivelesX, !DireccionX); //Me regreso (notese que tienen exclamacion)
+    MoverMotor(motorY, NivelesY, !DireccionY);
   }
+}
+
+void SegmentarInformacion(){             // x xx x xx
+  datoMover = SerialPi.read();
+
+  DireccionX = datoMover >> 5; //Primer Bit
+  NivelesX = (datoMover >> 3) & 0x03; //2-3
+  DireccionY = (datoMover >> 2) & 0x01; //4
+  NivelesY = datoMover & 0x03; //5-6
 }

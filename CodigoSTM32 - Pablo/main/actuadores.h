@@ -1,6 +1,6 @@
 // LIBRERÍAS
-#include "sensores.h"
-#include "comunicacion.h"
+//#include "sensores.h"
+//#include "comunicacion.h"
 
 // GPIO
 #define pinMotorX PA1
@@ -42,10 +42,10 @@ void MoverMotor(int Motor, int Nivel, bool Direccion){
 
   int Tipo;         //Definimos que motor mover
   if (Motor == 1){
-    Tipo = MotorX;
+    Tipo = pinMotorX;
   }
   else {
-    Tipo = MotorY;
+    Tipo = pinMotorY;
   }
 
   digitalWrite(pinDirMotores, Direccion); // Enables the motor to move in a particular direction
@@ -56,26 +56,6 @@ void MoverMotor(int Motor, int Nivel, bool Direccion){
     delayMicroseconds(Vel); 
   }
 
-}
-
-void EscaneoGeneral(){ //Asumiendo inicio en esquina superior izquierda
-  BajarPiston();
-  for (int u = 0; u <= 4; u++){
-    MoverMotor(Y, u, Abajo);
-    for (int i = 0; i <= 4; i++){
-
-      if (alarmaDistancia == 1){
-        ParenTodo();
-      }
-
-      leerColores(); //cuanto tiempo debe estar aquí? un delay no lo va a solucionar
-      EnviarColores(); //Asumiendo que se mande uno por uno
-      MoverMotor(X, i, Derecha);
-    }
-    MoverMotor(X, 4, Izquierda); //Volver a posición inicial para la siguienteFila
-  }
-  SubirPiston();
-  MoverMotor(Y, 4, Arriba);
 }
 
 void ApagarIman(){
@@ -100,4 +80,24 @@ void BajarPiston(){
 
 void ParenTodo(){
 
+}
+
+void EscaneoGeneral(){ //Asumiendo inicio en esquina superior izquierda
+  BajarPiston();
+  for (int u = 0; u <= 4; u++){
+    MoverMotor(Y, u, Abajo);
+    for (int i = 0; i <= 4; i++){
+
+      if (alarmaDistancia()){
+        ParenTodo();
+      }
+
+      int color = leerColores(); //cuanto tiempo debe estar aquí? un delay no lo va a solucionar
+      EnviarColor(color); //Asumiendo que se mande uno por uno
+      MoverMotor(X, i, Derecha);
+    }
+    MoverMotor(X, 4, Izquierda); //Volver a posición inicial para la siguienteFila
+  }
+  SubirPiston();
+  MoverMotor(Y, 4, Arriba);
 }

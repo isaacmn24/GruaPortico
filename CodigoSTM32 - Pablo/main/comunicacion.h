@@ -13,15 +13,6 @@ void EsperarInformacion(){
   }
 }
 
-void SegmentarInformacion(){             // x xx x xx
-  datoMover = SerialPi.read();
-
-  DireccionX = datoMover >> 5; //Primer Bit
-  NivelesX = (datoMover >> 3) & 0x03; //2-3
-  DireccionY = (datoMover >> 2) & 0x01; //4
-  NivelesY = datoMover & 0x03; //5-6
-}
-
 bool RecibirModo(){
   datoModo = SerialPi.read();
   return datoModo;
