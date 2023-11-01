@@ -99,14 +99,17 @@ int leerColores()
   // Comprobar cual es el color detectado y mostrarlo
   // esta parte del código realmente va en la RASP
   
-  if(colorRojo > colorVerde && colorRojo > colorAzul){
+  if(colorRojo > colorVerde && colorRojo > colorAzul){        // Color rojo
     return 1;
   }
-  if(colorVerde > colorRojo && colorVerde > colorAzul){
+  else if(colorVerde > colorRojo && colorVerde > colorAzul){  // Color verde
+    return 3;
+  }
+  else if(colorAzul > colorRojo && colorAzul > colorVerde){   // Color azul
     return 2;
   }
-  if(colorAzul > colorRojo && colorAzul > colorVerde){
-    return 3;
+  else {                                                      // Espacio vacío
+    return 4;
   }
 }
 
