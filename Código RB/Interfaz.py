@@ -48,13 +48,13 @@ class Pantalla(object):
 		pygame.draw.line(self.ventana, rojo, [10,250], [110,250],4)
 		pygame.draw.line(self.ventana, rojo, [10,350], [110,350],4)
 
-		# Dibuja Pieza
-		pieza.draw(self.ventana)
-
 		# Recorrer la matriz dibujando los circulos previos 
 		for i in range (len(self.matriz)): 
 			pygame.draw.circle(self.ventana,diccionario[self.matriz[i][2]], (((self.matriz[i][0]*100)+(160)),((self.matriz[i][1]*100))), 30)
-		
+				
+		# Dibuja Pieza
+		pieza.draw(self.ventana)
+
 		pygame.display.flip() # Refrescar pantalla
 		
 
@@ -86,6 +86,7 @@ class Pantalla(object):
 					if event.key == pygame.K_m:
 						pieza.Objetivo_X = self.Direcion_X
 						pieza.Objetivo_Y = self.Direcion_Y
+						
 
 					if event.key == pygame.K_SPACE: # Si coloco nuevo objeto
 
@@ -97,7 +98,7 @@ class Pantalla(object):
 						
 						if (self.M_recorrido) < (len(M_movimientos)-1):
 							print(self.M_recorrido,len(M_movimientos)-1)
-							modo, movs, matrix, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido)
+							modo, movs, M_Master_mod, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido)
 
 							Objetivo_X = coordenadas_i[0]
 							Objetivo_Y = coordenadas_i[1]
@@ -110,6 +111,8 @@ class Pantalla(object):
 							# Direcciónes que se indican al ejecutar pantalla, ahi deben de ir los circulos
 							self.Direcion_X = coordenadas_f[0]
 							self.Direcion_Y = coordenadas_f[1]
+							self.matriz = M_Master_mod
+
 						else:
 							pyautogui.alert("Fin Reacomodo")
 

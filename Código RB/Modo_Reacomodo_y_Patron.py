@@ -423,12 +423,13 @@ def Modo_Patron():
     C_Amarillo.clear()
     C_Blanco.clear()
     posiciones_correctas.clear()
+    Movimientos_grua.clear()
     leer_matriz_correcta(matriz_correcta,C_Rojo,C_Azul,C_Amarillo,C_Blanco,posiciones_correctas)
     maximo = 0
     while maximo < 25:
         print("---------------------------------------------\n")
         #ir a la ubicacion de carga
-        print("El valor inicial es (mover objeto) [5, 5]\n")
+        print("El valor inicial es (mover objeto) [-1,3]\n")
         #lee el valor
         if Matriz_lectura_zona_de_carga[maximo] == 1:
             print("El valor final es (colocar objeto) ",C_Rojo.pop(),"\n")
@@ -444,3 +445,5 @@ def Modo_Patron():
             print("---------------------------------------------\n")
             break
         maximo = maximo + 1
+
+Modo_Patron()

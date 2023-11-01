@@ -12,6 +12,7 @@ def movimientos(c_recorrido):
         coordenada_escaneada = [M_master[i][0],M_master[i][1]]
         if coordenadas_i == coordenada_escaneada:
             color = M_master[i][2]
+            M_master[i][2] = 4
             
     return coordenadas_i, coordenadas_f, color
 
