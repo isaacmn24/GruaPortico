@@ -76,13 +76,15 @@ class Pantalla(object):
 					# Cual modo queremos?
 					if event.key == pygame.K_p:
 						modo_op, Movs, M_escaneada, M_correcta, M_master = Modo_Reacomodo_y_Patron.Modo_Patron()
+						print(modo_op)
 
 					if event.key == pygame.K_o:
 						modo_op, Movs, M_escaneada, M_correcta, M_master = Modo_Reacomodo_y_Patron.Modo_Reacomodo()
+						print(modo_op)
 
 					# Da inició al modo
 					if event.key == pygame.K_i:
-						Modo_operacion, M_movimientos, M_Master_mod, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido, modo_op, Movs, M_escaneada, M_correcta, M_master)
+						M_movimientos, M_Master_mod, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido, modo_op, Movs, M_escaneada, M_correcta, M_master)
 						self.Inicio = 1
 
 						Objetivo_X = coordenadas_i[0]
@@ -96,7 +98,11 @@ class Pantalla(object):
 						# Direcciónes que se indican al ejecutar pantalla, ahi deben de ir los circulos
 						self.Direcion_X = coordenadas_f[0]
 						self.Direcion_Y = coordenadas_f[1]
-						self.matriz = M_Master_mod
+
+						if modo_op == 'Modo Patron':
+							self.matriz = self.matriz
+						else:
+							self.matriz = M_Master_mod
 
 					# Asigna los valores objetivo para mover circuos
 					if event.key == pygame.K_m:
@@ -108,12 +114,12 @@ class Pantalla(object):
 						self.matriz.append([pieza.Objetivo_X, pieza.Objetivo_Y, pieza.Color]) # Meto sus datos en lista
 						self.M_recorrido = self.M_recorrido + 1
 
-						if Modo_operacion == 'conesp' or 'Modo Patron':
+						if modo_op == 'conesp' or 'Modo Patron':
 							self.M_recorrido = self.M_recorrido + 1
 						
 						if (self.M_recorrido) < (len(M_movimientos)-1):
 							print(self.M_recorrido,len(M_movimientos)-1)
-							Modo, movs, M_Master_mod, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido, modo_op, Movs, M_escaneada, M_correcta, M_master)
+							movs, M_Master_mod, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido, modo_op, Movs, M_escaneada, M_correcta, M_master)
 
 							Objetivo_X = coordenadas_i[0]
 							Objetivo_Y = coordenadas_i[1]
@@ -126,7 +132,11 @@ class Pantalla(object):
 							# Direcciónes que se indican al ejecutar pantalla, ahi deben de ir los circulos
 							self.Direcion_X = coordenadas_f[0]
 							self.Direcion_Y = coordenadas_f[1]
-							self.matriz = M_Master_mod
+
+							if modo_op == 'Modo Patron':
+								self.matriz = self.matriz
+							else:
+								self.matriz = M_Master_mod
 
 						else:
 							pyautogui.alert("Fin Reacomodo")

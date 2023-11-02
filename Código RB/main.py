@@ -8,7 +8,7 @@ import Funciones_recorrido_acomodo
  
 def main():
     pygame.init()
-    # Tamaño de Pantalla m
+    # Tamaño de Pantalla
     pantalla_X = 900
     pantalla_Y = 600
 
