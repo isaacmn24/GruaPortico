@@ -74,7 +74,9 @@ matriz_escaneada = [[3, 1, 4, 4, 4],
 
 # lectura de csv y asignación de posiciones y tipo
 grid_master=[]
-formato_lista_from_csv=[]
+formato_lista_from_csv_reacomodo=[]
+formato_lista_from_csv_patron=[]
+
 grid_master=lectura_csv.lectura_csv()
 # Recorre la grid una por una para obtener los datos y entonces hacer el 
 # recorrido según coordenadas extraidas de vectores
@@ -83,7 +85,8 @@ for columna in range(len(grid_master[0])):
         posicion=grid_master[fila][columna]
         posicion_escaneada=matriz_escaneada[fila][columna]
         grid_espacial[fila][columna]=[int(posicion[0]), int(posicion[1])]
-        formato_lista_from_csv.append([int(posicion[0]), int(posicion[1]), int(posicion_escaneada)])
+        formato_lista_from_csv_reacomodo.append([int(posicion[0]), int(posicion[1]), int(posicion_escaneada)])
+        formato_lista_from_csv_patron.append([int(posicion[0]), int(posicion[1]), int(posicion[2])])
         # se almacena vector de cada espacio en matriz
 
 
@@ -384,7 +387,7 @@ def movimientos_modo_espacios_ceros():
 def Modo_Reacomodo():
     descubrir_bandera()
     if bandera_vacio[0] == 0:
-        print("modo sin espacios \n")
+        print("Modo sin espacios \n")
         modo = 'sinesp'
         C_Rojo.clear()
         C_Azul.clear()
@@ -400,10 +403,10 @@ def Modo_Reacomodo():
         lista_de_movimientos(C_Rojo,Color_Rojo,C_Azul,Color_Azul,C_Amarillo,Color_Amarillo,C_Blanco,Color_Blanco)
         Movimientos_grua[(len(Movimientos_grua))-1] = Movimientos_grua[0]
         print(Movimientos_grua)
-        return modo, Movimientos_grua, matriz_escaneada, matriz_correcta, formato_lista_from_csv
+        return modo, Movimientos_grua, matriz_escaneada, matriz_correcta, formato_lista_from_csv_reacomodo
         #mover_objeto(Movimientos_grua)
     else:
-        print("modo espacios vacios \n")
+        print("Modo espacios vacios \n")
         modo = 'conesp'
         hacer_listas(matriz_correcta,matriz_corcopia)
         hacer_listas(matriz_escaneada,matriz_esccopia)
@@ -415,9 +418,10 @@ def Modo_Reacomodo():
         movimientos_modo_espacios_ceros()
         bandera_vacio[0] = 0
         print(Movimientos_grua)
-        return modo, Movimientos_grua, matriz_escaneada, matriz_correcta, formato_lista_from_csv
+        return modo, Movimientos_grua, matriz_escaneada, matriz_correcta, formato_lista_from_csv_reacomodo
 
 def Modo_Patron():
+    modo = 'Modo Patron'
     C_Rojo.clear()
     C_Azul.clear()
     C_Amarillo.clear()
@@ -427,23 +431,31 @@ def Modo_Patron():
     leer_matriz_correcta(matriz_correcta,C_Rojo,C_Azul,C_Amarillo,C_Blanco,posiciones_correctas)
     maximo = 0
     while maximo < 25:
-        print("---------------------------------------------\n")
-        #ir a la ubicacion de carga
-        print("El valor inicial es (mover objeto) [-1,3]\n")
-        #lee el valor
+
         if Matriz_lectura_zona_de_carga[maximo] == 1:
-            print("El valor final es (colocar objeto) ",C_Rojo.pop(),"\n")
+            coor_roja = C_Rojo.pop()
+            Movimientos_grua.append(coor_roja)
+            print("El valor final es (colocar objeto) ",coor_roja,"\n")
             print("---------------------------------------------\n")
         if Matriz_lectura_zona_de_carga[maximo] == 2:
-            print("El valor final es (colocar objeto) ",C_Azul.pop(),"\n")
+            coor_azul = C_Azul.pop()
+            Movimientos_grua.append(coor_azul)
+            print("El valor final es (colocar objeto) ",coor_azul,"\n")
             print("---------------------------------------------\n")
         if Matriz_lectura_zona_de_carga[maximo] == 3:
-            print("El valor final es (colocar objeto) ",C_Amarillo.pop(),"\n")
+            coor_amarillo = C_Amarillo.pop()
+            Movimientos_grua.append(coor_amarillo)
+            print("El valor final es (colocar objeto) ",coor_amarillo,"\n")
             print("---------------------------------------------\n")
         if Matriz_lectura_zona_de_carga[maximo] == 4:
             print("No hay mas objetos en la zona de carga \n")
             print("---------------------------------------------\n")
             break
         maximo = maximo + 1
+        
+        #ir a la ubicacion de carga
+        Movimientos_grua.append([-1,3])
+        print("El valor inicial es (mover objeto) [-1,3]\n")
+        #lee el valor
 
-Modo_Patron()
+    return modo, Movimientos_grua, matriz_escaneada, matriz_correcta, formato_lista_from_csv_patron

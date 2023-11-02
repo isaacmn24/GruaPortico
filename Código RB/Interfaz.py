@@ -2,6 +2,7 @@
 import pygame, sys
 import pyautogui
 import Funciones_recorrido_acomodo
+import Modo_Reacomodo_y_Patron
 
 reloj = pygame.time.Clock()
 
@@ -28,6 +29,8 @@ class Pantalla(object):
 		self.matriz = []
 
 		self.M_recorrido = 0
+
+		self.Inicio = 0
 	
 	# Función que dibuja los elementos en pantalla
 	def dibujar_pantalla(self):
@@ -51,29 +54,17 @@ class Pantalla(object):
 		# Recorrer la matriz dibujando los circulos previos 
 		for i in range (len(self.matriz)): 
 			pygame.draw.circle(self.ventana,diccionario[self.matriz[i][2]], (((self.matriz[i][0]*100)+(160)),((self.matriz[i][1]*100))), 30)
-				
-		# Dibuja Pieza
-		pieza.draw(self.ventana)
+
+		if 'pieza' in globals():
+			# Dibuja Pieza
+			pieza.draw(self.ventana)
 
 		pygame.display.flip() # Refrescar pantalla
-		
 
-	def ejecutar(self, Posicion_XY, Direccion_XY, color, M_Master, M_movimientos, Modo_operacion):
+
+	def ejecutar(self):
 
 		global pieza
-		
-		# Direcciónes que se indican al ejecutar pantalla, ahi deben de ir los circulos
-		self.Direcion_X = Direccion_XY[0]
-		self.Direcion_Y = Direccion_XY[1]
-		self.matriz = M_Master
-
-		Objetivo_X = Posicion_XY[0]
-		Objetivo_Y = Posicion_XY[1]
-		Circulo_X = (Objetivo_X*100)+(160)
-		Circulo_Y = (Objetivo_Y*100)
-		Color = color
-
-		pieza = Circulo(Circulo_X,Circulo_Y,Color,Objetivo_X,Objetivo_Y)	
 
 		while True:
 			for event in pygame.event.get():
@@ -82,23 +73,47 @@ class Pantalla(object):
 
 				if event.type == pygame.KEYDOWN: # Si aprieto una tecla 
 
+					# Cual modo queremos?
+					if event.key == pygame.K_p:
+						modo_op, Movs, M_escaneada, M_correcta, M_master = Modo_Reacomodo_y_Patron.Modo_Patron()
+
+					if event.key == pygame.K_o:
+						modo_op, Movs, M_escaneada, M_correcta, M_master = Modo_Reacomodo_y_Patron.Modo_Reacomodo()
+
+					# Da inició al modo
+					if event.key == pygame.K_i:
+						Modo_operacion, M_movimientos, M_Master_mod, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido, modo_op, Movs, M_escaneada, M_correcta, M_master)
+						self.Inicio = 1
+
+						Objetivo_X = coordenadas_i[0]
+						Objetivo_Y = coordenadas_i[1]
+						Circulo_X = (Objetivo_X*100)+(160)
+						Circulo_Y = (Objetivo_Y*100)
+						Color = color
+
+						pieza = Circulo(Circulo_X,Circulo_Y,Color,Objetivo_X,Objetivo_Y)
+
+						# Direcciónes que se indican al ejecutar pantalla, ahi deben de ir los circulos
+						self.Direcion_X = coordenadas_f[0]
+						self.Direcion_Y = coordenadas_f[1]
+						self.matriz = M_Master_mod
+
 					# Asigna los valores objetivo para mover circuos
 					if event.key == pygame.K_m:
 						pieza.Objetivo_X = self.Direcion_X
 						pieza.Objetivo_Y = self.Direcion_Y
 						
-
 					if event.key == pygame.K_SPACE: # Si coloco nuevo objeto
 
 						self.matriz.append([pieza.Objetivo_X, pieza.Objetivo_Y, pieza.Color]) # Meto sus datos en lista
 						self.M_recorrido = self.M_recorrido + 1
 
-						if Modo_operacion == 'conesp':
+						if Modo_operacion == 'conesp' or 'Modo Patron':
 							self.M_recorrido = self.M_recorrido + 1
 						
 						if (self.M_recorrido) < (len(M_movimientos)-1):
 							print(self.M_recorrido,len(M_movimientos)-1)
-							modo, movs, M_Master_mod, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido)
+							Modo, movs, M_Master_mod, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido, modo_op, Movs, M_escaneada, M_correcta, M_master)
 
 							Objetivo_X = coordenadas_i[0]
 							Objetivo_Y = coordenadas_i[1]
@@ -123,14 +138,13 @@ class Pantalla(object):
 
 			self.dibujar_pantalla()
 
-			pieza.Posicionamiento()
+			if 'pieza' in globals():
+				pieza.Posicionamiento()
 
 			reloj.tick(60) # FPS
 
 	def pre_ejecucion(self):
-		Modo_op, matriz_movimientos, Matrix, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido)
-		M_master = Matrix
-		self.ejecutar(coordenadas_i,coordenadas_f, color, M_master, matriz_movimientos, Modo_op)
+		self.ejecutar()
 
 
 # Clase para objeto que se va a mover
