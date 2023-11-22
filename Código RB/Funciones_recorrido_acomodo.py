@@ -34,3 +34,4 @@ def llamar_movimientos(Input_recorrido, modo_op, M_movimientos, M_escaneada, M_c
     coordenadas_i, coordenadas_f, color = movimientos(recorrido, modo_op, M_movimientos, M_master)
     return M_movimientos, M_master, coordenadas_i, coordenadas_f, color
 
+#  nueva función que se ejecute cuandose oprima un botón y con esto se recoelcten los datos, y se envien al modo para que empiece el recorrido, modo reacomodo
