@@ -18,7 +18,7 @@ def main():
 
     # Ejecuta la interfas y le ingresa todos los datos de ubicacíon y traslado
     pantalla.pre_ejecucion()
-          
+
  
 if __name__ == "__main__":
     main()

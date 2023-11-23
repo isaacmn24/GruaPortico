@@ -1,6 +1,6 @@
 import serial 
 
-ser = serial.Serial("/dev/ttyACM0", 9600)   # Serial port on Raspberry Pi
+# ser = serial.Serial("/dev/ttyACM0", 9600)   # Serial port on Raspberry Pi
 
 def recibirColores():
     """
@@ -15,18 +15,20 @@ def recibirColores():
     Retorna la matriz escaneada por el STM32
 
     """
-    matriz_escaneada = [[0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0]]
-    for fila in matriz_escaneada:
-        for columna in fila:
-            while ser.in_waiting <= 0:
-                if ser.in_waiting() > 0:
-                    color = ser.read(1)
-                    matriz_escaneada[fila][columna] = color
+    print("datos")
+    matriz_escaneada = [[3, 1, 4, 4, 4],
+                        [3, 2, 2, 2, 1],
+                        [3, 4, 1, 3, 1],
+                        [1, 2, 4, 1, 4],
+                        [4, 1, 2, 3, 4]]
+    # for fila in matriz_escaneada:
+    #     for columna in fila:
+    #         while ser.in_waiting <= 0:
+    #             if ser.in_waiting() > 0:
+    #                 color = ser.read(1)
+    #                 matriz_escaneada[fila][columna] = color
     return matriz_escaneada
+
 
 def enviarSTM32(dato):
     """
@@ -40,12 +42,13 @@ def enviarSTM32(dato):
     Retorna un 1 si se envió satisfactoriamente el dato.
 
     """
-    return ser.write(dato)
+    # return ser.write(dato)
 
 def recibirSTM32():
     """
     Retorna el byte leído de la STM32
     """
-    while ser.in_waiting <= 0:
-        if ser.in_waiting() > 0:
-            return ser.read(1)
+    print("dato")
+    # while ser.in_waiting <= 0:
+    #     if ser.in_waiting() > 0:
+    #         return ser.read(1)

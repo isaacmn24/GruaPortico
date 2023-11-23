@@ -2,6 +2,7 @@
 #Para el funcionamiento correcto se debe mantener el mismo orden de la grid_espacial
 
 import lectura_csv
+import comunicacion
 
 #esta bandera nos indica si reacomodamos comparando en la matriz correcta o se realiza el
 #reacomodamiento de forma automatica
@@ -55,13 +56,12 @@ matriz_correcta = [[1, 3, 1, 2, 1],
 # 5 color azul
 # 5 color amarillo
 
+matriz_escaneada = []
 
 #Esta matriz se consigue escaneando la matriz 5x5
-matriz_escaneada = [[3, 1, 4, 4, 4],
-                    [3, 2, 2, 2, 1],
-                    [3, 4, 1, 3, 1],
-                    [1, 2, 4, 1, 4],
-                    [4, 1, 2, 3, 4]]
+def matriz_escaneda_lectura(Matiz_escan_lec):
+    matriz_escaneada = Matiz_escan_lec
+    print(matriz_escaneada)
 # 8 color rojo
 # 8 color azul
 # 9 color amarillo
@@ -78,26 +78,28 @@ formato_lista_from_csv_reacomodo=[]
 formato_lista_from_csv_patron=[]
 
 grid_master=lectura_csv.lectura_csv()
-# Recorre la grid una por una para obtener los datos y entonces hacer el 
-# recorrido según coordenadas extraidas de vectores
-for columna in range(len(grid_master[0])):
-    for fila in range(len(grid_master)):
-        posicion=grid_master[fila][columna]
-        posicion_escaneada=matriz_escaneada[fila][columna]
-        grid_espacial[fila][columna]=[int(posicion[0]), int(posicion[1])]
-        formato_lista_from_csv_reacomodo.append([int(posicion[0]), int(posicion[1]), int(posicion_escaneada)])
-        formato_lista_from_csv_patron.append([int(posicion[0]), int(posicion[1]), int(posicion[2])])
-        # se almacena vector de cada espacio en matriz
+
+def inicio():
+    # Recorre la grid una por una para obtener los datos y entonces hacer el 
+    # recorrido según coordenadas extraidas de vectores
+    for columna in range(len(grid_master[0])):
+        for fila in range(len(grid_master)):
+            posicion=grid_master[fila][columna]
+            posicion_escaneada=matriz_escaneada[fila][columna]
+            grid_espacial[fila][columna]=[int(posicion[0]), int(posicion[1])]
+            formato_lista_from_csv_reacomodo.append([int(posicion[0]), int(posicion[1]), int(posicion_escaneada)])
+            formato_lista_from_csv_patron.append([int(posicion[0]), int(posicion[1]), int(posicion[2])])
+            # se almacena vector de cada espacio en matriz
 
 
-#Almacenamiento en matriz correcta
+    #Almacenamiento en matriz correcta
 
-# Recorre la grid una por una para obtener los datos y entonces hacer el 
-# recorrido según coordenadas extraidas de vectores
-for columna in range(len(grid_master[0])):
-    for fila in range(len(grid_master)):
-        posicion=grid_master[fila][columna]
-        matriz_correcta[fila][columna]=int(posicion[2])
+    # Recorre la grid una por una para obtener los datos y entonces hacer el 
+    # recorrido según coordenadas extraidas de vectores
+    for columna in range(len(grid_master[0])):
+        for fila in range(len(grid_master)):
+            posicion=grid_master[fila][columna]
+            matriz_correcta[fila][columna]=int(posicion[2])
 
 
 #####################################################################
@@ -385,6 +387,7 @@ def movimientos_modo_espacios_ceros():
     
 #Llamar Modo Reacomodo o Patron
 def Modo_Reacomodo():
+    inicio()
     descubrir_bandera()
     if bandera_vacio[0] == 0:
         print("Modo sin espacios \n")
@@ -420,18 +423,15 @@ def Modo_Reacomodo():
         print(Movimientos_grua)
         return modo, Movimientos_grua, matriz_escaneada, matriz_correcta, formato_lista_from_csv_reacomodo
 
+
+
 def Modo_Patron():
     modo = 'Modo Patron'
-    C_Rojo.clear()
-    C_Azul.clear()
-    C_Amarillo.clear()
-    C_Blanco.clear()
-    posiciones_correctas.clear()
-    Movimientos_grua.clear()
+
     leer_matriz_correcta(matriz_correcta,C_Rojo,C_Azul,C_Amarillo,C_Blanco,posiciones_correctas)
     maximo = 0
     while maximo < 25:
-
+        comunicacion.recibirSTM32()
         if Matriz_lectura_zona_de_carga[maximo] == 1:
             coor_roja = C_Rojo.pop()
             Movimientos_grua.append(coor_roja)
