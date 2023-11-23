@@ -13,6 +13,9 @@ blanco = (255,255,255)
  
 diccionario = {1:rojo, 2:azul, 3:verde, 4:blanco}
 
+Boton_ancho = 50
+Boton_largo = 220
+
 #Clase para creación de pantalla y poder ingresarle datos desde main
 class Pantalla(object):
 	def __init__(self,Pantalla_X, Pantalla_Y):
@@ -59,19 +62,37 @@ class Pantalla(object):
 			# Dibuja Pieza
 			pieza.draw(self.ventana)
 
+		#botones
+
+		boton_m_patron.definir(self.ventana)
+
+		boton_m_patron.textoboton(self.ventana)
+
+		boton_m_reacomodo.definir(self.ventana)
+
+		boton_m_reacomodo.textoboton(self.ventana)
+
 		pygame.display.flip() # Refrescar pantalla
 
 
 	def ejecutar(self):
 
 		global pieza
+		global boton_m_patron
+		global boton_m_reacomodo
 
 		while True:
+			coor_x = 755
+			coor_y = 50
+			boton_m_patron = Boton(coor_x,coor_y+80,Boton_largo,Boton_ancho,"Modo Patrón")
+			boton_m_reacomodo = Boton(coor_x,coor_y+160,Boton_largo,Boton_ancho,"Modo Reacomodo")
+			buttons = [boton_m_patron,boton_m_reacomodo]
+
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT: # Cerrar ventana
 					sys.exit()
 
-				if event.type == pygame.KEYDOWN: # Si aprieto una tecla 
+				elif event.type == pygame.KEYDOWN: # Si aprieto una tecla 
 
 					# Cual modo queremos?
 					if event.key == pygame.K_p:
@@ -145,6 +166,12 @@ class Pantalla(object):
 					if event.key == pygame.K_e: # Si presiono e
 					
 						self.matriz = []
+		
+				elif event.type == pygame.MOUSEBUTTONDOWN:
+					# Verificar si se hizo clic en el botón
+					for button in buttons:
+						if button.rect.collidepoint(event.pos):
+							print("Clic")
 
 			self.dibujar_pantalla()
 
@@ -192,6 +219,37 @@ class Circulo(object):
 
 		if (self.Circulo_Y < Destino_Y):
 			self.Circulo_Y += 5
+
+	# Clase para objeto que se va a mover
+class Boton(object):
+	def __init__(self,button_x_, button_y_, Boton_largo, Boton_ancho, label):
+		# Ubicación y tamaño de círculo
+		self.button_x_ = button_x_
+		self.button_y_ = button_y_
+		self.Boton_largo = Boton_largo
+		self.Boton_ancho = Boton_ancho
+		self.label = label
+
+	def definir(self,ventana):
+
+		button_color = (171,171,171)
+
+		self.boton_m = pygame.Rect(self.button_x_, self.button_y_, self.Boton_largo, self.Boton_ancho)
+		pygame.draw.rect(ventana, button_color, self.boton_m)
+
+
+	def textoboton(self, ventana):
+		hover_color = (156, 162, 219)
+
+		font = pygame.font.Font(None, 30)
+		text = font.render(self.label, True, (255, 255, 255))  # Texto, anti-aliasing, color
+
+		# Obtener el rectángulo del texto y centrarlo en el botón
+		text_rect = text.get_rect(center=self.boton_m.center)
+
+		ventana.blit(text, text_rect)
+
+	
 
 
 # # Ubicación y dirección de pieza
