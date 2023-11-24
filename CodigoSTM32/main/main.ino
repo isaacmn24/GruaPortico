@@ -17,6 +17,8 @@ void setup() {
 
   CalibrarCero();
 
+  
+
   setup_sensores();
 }
 

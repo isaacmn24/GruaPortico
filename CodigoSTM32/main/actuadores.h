@@ -3,12 +3,13 @@
 //#include "comunicacion.h"
 
 // GPIO
+#define pinDirMotores PA2
 #define pinMotorX PA3
 #define pinMotorY PA4
-#define pinDirMotores PA1
-#define pinIman PB2
-#define pinCalibrarX PA5
-#define pinCalibrarY PA6
+#define pinActuador PB2
+#define pinIman PB3
+#define pinCalibrarX PB4
+#define pinCalibrarY PB5
 
 // CONSTANTES DEL MOTOR
 int PulRev = 6400;    // Pulsos por revolución

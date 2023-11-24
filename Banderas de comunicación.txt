@@ -1,0 +1,9 @@
+Bandera de inicio: Después de haber leído toda la interfaz y que la grúa este en cero cero le avise al master que puede empezar su algoritmo. Terminó calibración
+
+
+
+Master manda datos de las primeras dos corrdenadas.
+Patrón: Mueve el bloque y se devuelve, entonces manda FLAG
+Reacomodo: Master manda dos coordenadas, donde tiene que agarrar y luego dejar. Cuando lo deja, manda FLAG.
+
+FLAG para avisar que ya recogió el bloque, pues master quiere coordinar el movimiento con la interfaz.

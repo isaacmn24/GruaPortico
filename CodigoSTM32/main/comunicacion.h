@@ -14,6 +14,7 @@ void EsperarInformacion(){
 }
 
 bool RecibirModo(){
+  
   datoModo = SerialPi.read();
   return datoModo;
 }
