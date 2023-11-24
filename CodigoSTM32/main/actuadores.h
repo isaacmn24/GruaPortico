@@ -6,8 +6,8 @@
 #define pinDirMotores PA2
 #define pinMotorX PA3
 #define pinMotorY PA4
-#define pinActuador PB2
-#define pinIman PB3
+#define pinActuador PA4
+#define pinIman PA6
 #define pinCalibrarX PB4
 #define pinCalibrarY PB5
 
