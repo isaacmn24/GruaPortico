@@ -17,6 +17,9 @@ diccionario = {1: rojo, 2: azul, 3: verde, 4: blanco}
 Boton_ancho = 50
 Boton_largo = 220
 
+#cadena inical bits
+bin_y = "0001"
+bin_x = "0000"
 
 # Clase para creación de pantalla y poder ingresarle datos desde main
 class Pantalla(object):
@@ -59,8 +62,7 @@ class Pantalla(object):
         pygame.draw.line(self.ventana, rojo, [10, 350], [110, 350], 4)
 
         for i in range(len(self.matriz)):
-            pygame.draw.circle(self.ventana, diccionario[self.matriz[i][2]],
-                               (((self.matriz[i][0] * 100) + (160)), ((self.matriz[i][1] * 100))), 30)
+            pygame.draw.circle(self.ventana, diccionario[self.matriz[i][2]],(((self.matriz[i][0] * 100) + (160)), ((self.matriz[i][1] * 100))), 30)
 
         if 'pieza' in globals():
             pieza.draw(self.ventana)
@@ -78,72 +80,12 @@ class Pantalla(object):
         global pieza
 
         while True:
+            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
 
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_p:
-                        modo_op, Movs, M_escaneada, M_correcta, M_master = Modo_Reacomodo_y_Patron.Modo_Patron()
-                        print(modo_op)
-                    if event.key == pygame.K_o:
-                        modo_op, Movs, M_escaneada, M_correcta, M_master = Modo_Reacomodo_y_Patron.Modo_Reacomodo()
-                        print(modo_op)
-                    if event.key == pygame.K_i:
-                        M_movimientos, M_Master_mod, coordenadas_i, coordenadas_f, color = \
-                            Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido, modo_op, Movs,
-                                                                          M_escaneada, M_correcta, M_master)
-                        self.Inicio = 1
-
-                        Objetivo_X = coordenadas_i[0]
-                        Objetivo_Y = coordenadas_i[1]
-                        Circulo_X = (Objetivo_X * 100) + (160)
-                        Circulo_Y = (Objetivo_Y * 100)
-                        Color = color
-
-                        pieza = Circulo(Circulo_X, Circulo_Y, Color, Objetivo_X, Objetivo_Y)
-
-                        self.Direcion_X = coordenadas_f[0]
-                        self.Direcion_Y = coordenadas_f[1]
-
-                        if modo_op == 'Modo Patron':
-                            self.matriz = self.matriz
-                        else:
-                            self.matriz = M_Master_mod
-
-                    if event.key == pygame.K_m:
-                        pieza.Objetivo_X = self.Direcion_X
-                        pieza.Objetivo_Y = self.Direcion_Y
-
-                    if event.key == pygame.K_SPACE:
-                        self.matriz.append([pieza.Objetivo_X, pieza.Objetivo_Y, pieza.Color])
-                        self.M_recorrido = self.M_recorrido + 1
-
-                        if modo_op == 'conesp' or modo_op == 'Modo Patron':
-                            self.M_recorrido = self.M_recorrido + 1
-
-                        if (self.M_recorrido) < (len(M_movimientos) - 1):
-                            movs, M_Master_mod, coordenadas_i, coordenadas_f, color = \
-                                Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido, modo_op, Movs,
-                                                                              M_escaneada, M_correcta, M_master)
-
-                            Objetivo_X = coordenadas_i[0]
-                            Objetivo_Y = coordenadas_i[1]
-                            Circulo_X = (Objetivo_X * 100) + (160)
-                            Circulo_Y = (Objetivo_Y * 100)
-                            Color = color
-
-                            pieza = Circulo(Circulo_X, Circulo_Y, Color, Objetivo_X, Objetivo_Y)
-
-                            self.Direcion_X = coordenadas_f[0]
-                            self.Direcion_Y = coordenadas_f[1]
-
-                            if modo_op == 'Modo Patron':
-                                self.matriz = self.matriz
-                            else:
-                                self.matriz = M_Master_mod
-                        else:
-                            pyautogui.alert("Fin Reacomodo")
 
                     if event.key == pygame.K_e:
                         self.matriz = []
@@ -151,8 +93,16 @@ class Pantalla(object):
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if (755 <= mouse[0] <= 970) and (50 <= mouse[1] <= 100):
                         pygame.quit()
-                self.boton_m_patron.verificar_clic(event)
-                self.boton_m_reacomodo.verificar_clic(event)
+                LABEL1 = self.boton_m_patron.verificar_clic(event)
+                LABEL2 = self.boton_m_reacomodo.verificar_clic(event)
+                
+                if LABEL1 == "Modo Patron":
+                    modo_op, Movs, M_escaneada, M_correcta, M_master = Modo_Reacomodo_y_Patron.Modo_Patron()
+                    self.movsecuencial(modo_op, Movs, M_escaneada, M_correcta, M_master)
+
+                if LABEL2 == "Modo Reacomodo":
+                    modo_op, Movs, M_escaneada, M_correcta, M_master = Modo_Reacomodo_y_Patron.Modo_Reacomodo()
+                    self.movsecuencial(modo_op, Movs, M_escaneada, M_correcta, M_master)
 
             self.dibujar_pantalla()
             mouse = pygame.mouse.get_pos()
@@ -162,6 +112,132 @@ class Pantalla(object):
 
             reloj.tick(60)
 
+    def movsecuencial(self, modo_op, Movs, M_escaneada, M_correcta, M_master):
+
+        while True:
+
+####
+
+########3
+
+            if Movs[0] == 4:
+                pieza = Circulo(900,350,1,900,350)
+                pieza.draw()
+                cadena = "1111111"
+                cadena_enviar = cadena.encode()
+                comunicacion.enviarSTM32(cadena_enviar)
+
+                break
+
+
+            comunicacion.recibirSTM32()
+        
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+                
+            self.dibujar_pantalla()
+       
+            if 'pieza' in globals():
+                pieza.Posicionamiento()
+
+                
+            if comunicacion.recibirSTM32() == "0010000":
+        
+                M_movimientos, M_Master_mod, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido, modo_op, Movs, M_escaneada, M_correcta, M_master)
+                self.Inicio = 1
+
+                Objetivo_X = coordenadas_i[0]
+                Objetivo_Y = coordenadas_i[1]
+                Circulo_X = (Objetivo_X * 100) + (160)
+                Circulo_Y = (Objetivo_Y * 100)
+                Color = color
+
+                pieza = Circulo(Circulo_X, Circulo_Y, Color, Objetivo_X, Objetivo_Y)
+#################################################3
+######################################
+                cadena_bits_y = bin_y+format(bin(pieza.Objetivo_Y)[2:],f'0{"3"}')
+                cadena_enviar_y = cadena_bits_y.encode()
+                comunicacion.enviarSTM32(cadena_enviar_y)
+
+                cadena_bits_x = bin_x+format(bin(pieza.Objetivo_X)[2:],f'0{"3"}')
+                cadena_enviarX = cadena_bits_x.encode()
+                comunicacion.enviarSTM32(cadena_enviar_x)
+
+                ##función enviar coordenada
+########################################
+###########################################
+
+                self.Direcion_X = coordenadas_f[0]
+                self.Direcion_Y = coordenadas_f[1]
+
+                if modo_op == 'Modo Patron':
+                    self.matriz = self.matriz
+                else:
+                    self.matriz = M_Master_mod
+            
+            if comunicacion.recibirSTM32() == "0010000":
+                pieza.Objetivo_X = self.Direcion_X
+                pieza.Objetivo_Y = self.Direcion_Y
+
+#################################################3
+######################################
+                cadena_bits_y = bin_y+format(bin(pieza.Objetivo_Y)[2:],f'0{"3"}')
+                cadena_enviar_y = cadena_bits_y.encode()
+                comunicacion.enviarSTM32(cadena_enviar_y)
+
+                cadena_bits_x = bin_x+format(bin(pieza.Objetivo_X)[2:],f'0{"3"}')
+                cadena_enviar_x = cadena_bits_x.encode()
+                comunicacion.enviarSTM32(cadena_enviar_x)
+
+                ##función enviar coordenada
+########################################
+###########################################
+
+            if comunicacion.recibirSTM32() == "0010000":
+                self.matriz.append([pieza.Objetivo_X, pieza.Objetivo_Y, pieza.Color])
+                self.M_recorrido = self.M_recorrido + 1
+
+                if modo_op == 'conesp' or modo_op == 'Modo Patron':
+                    self.M_recorrido = self.M_recorrido + 1
+
+                if (self.M_recorrido) < (len(M_movimientos) - 1):
+                    movs, M_Master_mod, coordenadas_i, coordenadas_f, color = Funciones_recorrido_acomodo.llamar_movimientos(self.M_recorrido, modo_op, Movs, M_escaneada, M_correcta, M_master)
+
+                    Objetivo_X = coordenadas_i[0]
+                    Objetivo_Y = coordenadas_i[1]
+                    Circulo_X = (Objetivo_X * 100) + (160)
+                    Circulo_Y = (Objetivo_Y * 100)
+                    Color = color
+
+                    pieza = Circulo(Circulo_X, Circulo_Y, Color, Objetivo_X, Objetivo_Y)
+
+    #################################################3
+    ######################################
+                    cadena_bits_y = bin_y+format(bin(pieza.Objetivo_Y)[2:],f'0{"3"}')
+                    cadena_enviar_y = cadena_bits_y.encode()
+                    comunicacion.enviarSTM32(cadena_enviar_y)
+                    cadena_bits_x = bin_x+format(bin(pieza.Objetivo_X)[2:],f'0{"3"}')
+                    cadena_enviar_x = cadena_bits_x.encode()
+                    comunicacion.enviarSTM32(cadena_enviar_x)
+
+                    ##función enviar coordenada
+    ########################################
+    ###########################################
+
+                    self.Direcion_X = coordenadas_f[0]
+                    self.Direcion_Y = coordenadas_f[1]
+
+                    if modo_op == 'Modo Patron':
+                        self.matriz = self.matriz
+                        modo_op, Movs, M_escaneada, M_correcta, M_master = Modo_Reacomodo_y_Patron.Modo_Patron()
+                        self.movsecuencial(modo_op, Movs, M_escaneada, M_correcta, M_master)
+
+                    else:
+                        self.matriz = M_Master_mod                    
+                else:
+                    pyautogui.alert("Fin Reacomodo")
+            reloj.tick(60)
 
     def pre_ejecucion(self):
         coor_x = 755
@@ -170,7 +246,7 @@ class Pantalla(object):
         self.boton_m_reacomodo = Boton(coor_x, coor_y + 160, Boton_largo, Boton_ancho, "Modo Reacomodo")
 
         self.ejecutar()
-
+        
 
 # Clase para objeto que se va a mover
 class Circulo(object):
@@ -227,9 +303,16 @@ class Boton(object):
             mouse_pos = pygame.mouse.get_pos()
             if self.boton_m.collidepoint(mouse_pos):
                 if self.label == "Modo Patron":
-                    comunicacion.recibirSTM32()
+                    LABEL = "Modo Patron"
+                    return LABEL
                 else:
                     Matriz_de_lectura = comunicacion.recibirColores()
                     Modo_Reacomodo_y_Patron.matriz_escaneda_lectura(Matriz_de_lectura)
+                    LABEL = "Modo Reacomodo"
+                    return LABEL
+                    # Pantalla.movsecuencial(, modo_op, Movs, M_escaneada, M_correcta, M_master)
+                    
+                    
+
                     
                     

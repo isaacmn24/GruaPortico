@@ -1,6 +1,7 @@
 import serial 
+import time
 
-# ser = serial.Serial("/dev/ttyACM0", 9600)   # Serial port on Raspberry Pi
+ser = serial.Serial("/dev/ttyACM0", 9600, timeout=1)   # Serial port on Raspberry Pi
 
 def recibirColores():
     """
@@ -21,12 +22,13 @@ def recibirColores():
                         [3, 4, 1, 3, 1],
                         [1, 2, 4, 1, 4],
                         [4, 1, 2, 3, 4]]
-    # for fila in matriz_escaneada:
-    #     for columna in fila:
-    #         while ser.in_waiting <= 0:
-    #             if ser.in_waiting() > 0:
-    #                 color = ser.read(1)
-    #                 matriz_escaneada[fila][columna] = color
+    for fila in matriz_escaneada:
+        for columna in fila:
+            while ser.in_waiting <= 0:
+                if ser.in_waiting() > 0:
+                    color = ser.read(1)
+                    matriz_escaneada[fila][columna] = color
+    time.sleep(1)
     return matriz_escaneada
 
 
@@ -42,13 +44,14 @@ def enviarSTM32(dato):
     Retorna un 1 si se envió satisfactoriamente el dato.
 
     """
-    # return ser.write(dato)
+    ser.write(dato)
+    time.sleep(1)
 
 def recibirSTM32():
-    """
-    Retorna el byte leído de la STM32
-    """
-    print("dato")
-    # while ser.in_waiting <= 0:
-    #     if ser.in_waiting() > 0:
-    #         return ser.read(1)
+    # Leer bytes de la conexión UART
+    bytes_recibidos = ser.read(1)  # Puedes ajustar la cantidad de bytes que deseas leer
+
+    # Convertir los bytes a una cadena binaria
+    bits_recibidos = bin(int.from_bytes(bytes_recibidos, byteorder='big'))[2:]
+
+    return bits_recibidos

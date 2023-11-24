@@ -28,7 +28,7 @@ C_Amarillo = []
 C_Blanco = []
 
 #Array Movimientos a realizar
-Movimientos_grua = [[-1,3]]
+Movimientos_grua = [[0,0]]
 
 Matriz_lectura_zona_de_carga = [1,2,3,1,3,2,1,1,1,1,1,2,2,2,3,3,3,1,2,3,1,2,3,1,2]
 
@@ -56,10 +56,10 @@ matriz_correcta = [[1, 3, 1, 2, 1],
 # 5 color azul
 # 5 color amarillo
 
-matriz_escaneada = []
 
 #Esta matriz se consigue escaneando la matriz 5x5
 def matriz_escaneda_lectura(Matiz_escan_lec):
+    global matriz_escaneada
     matriz_escaneada = Matiz_escan_lec
     print(matriz_escaneada)
 # 8 color rojo
@@ -427,35 +427,45 @@ def Modo_Reacomodo():
 
 def Modo_Patron():
     modo = 'Modo Patron'
-
+    elemento_carga = comunicacion.recibirSTM32() # extrae el valor de lectura
+    inicio()
     leer_matriz_correcta(matriz_correcta,C_Rojo,C_Azul,C_Amarillo,C_Blanco,posiciones_correctas)
     maximo = 0
     while maximo < 25:
-        comunicacion.recibirSTM32()
         if Matriz_lectura_zona_de_carga[maximo] == 1:
-            coor_roja = C_Rojo.pop()
-            Movimientos_grua.append(coor_roja)
-            print("El valor final es (colocar objeto) ",coor_roja,"\n")
-            print("---------------------------------------------\n")
+            if len(C_Rojo) == 0:
+                Movimientos_grua.append(elemento_carga)#calor blanco
+            else:
+                coor_roja = C_Rojo.pop()
+                Movimientos_grua.append(coor_roja)
+                print("El valor final es (colocar objeto) ",coor_roja,"\n")
+                print("---------------------------------------------\n")
         if Matriz_lectura_zona_de_carga[maximo] == 2:
-            coor_azul = C_Azul.pop()
-            Movimientos_grua.append(coor_azul)
-            print("El valor final es (colocar objeto) ",coor_azul,"\n")
-            print("---------------------------------------------\n")
+            if len(C_Azul) == 0:
+                Movimientos_grua.append(elemento_carga)#calor blanco
+            else:
+                coor_azul = C_Azul.pop()
+                Movimientos_grua.append(coor_azul)
+                print("El valor final es (colocar objeto) ",coor_azul,"\n")
+                print("---------------------------------------------\n")
         if Matriz_lectura_zona_de_carga[maximo] == 3:
-            coor_amarillo = C_Amarillo.pop()
-            Movimientos_grua.append(coor_amarillo)
-            print("El valor final es (colocar objeto) ",coor_amarillo,"\n")
-            print("---------------------------------------------\n")
+            if len(C_Amarillo) == 0:
+                Movimientos_grua.append(elemento_carga)#calor blanco
+            else:
+                coor_amarillo = C_Amarillo.pop()
+                Movimientos_grua.append(coor_amarillo)
+                print("El valor final es (colocar objeto) ",coor_amarillo,"\n")
+                print("---------------------------------------------\n")
         if Matriz_lectura_zona_de_carga[maximo] == 4:
+            Movimientos_grua.append(elemento_carga)#valor blanco
             print("No hay mas objetos en la zona de carga \n")
             print("---------------------------------------------\n")
-            break
         maximo = maximo + 1
         
         #ir a la ubicacion de carga
-        Movimientos_grua.append([-1,3])
-        print("El valor inicial es (mover objeto) [-1,3]\n")
+        Movimientos_grua.append([0,0])
+        print("El valor inicial es (mover objeto) [0,0]\n")
         #lee el valor
 
     return modo, Movimientos_grua, matriz_escaneada, matriz_correcta, formato_lista_from_csv_patron
+
