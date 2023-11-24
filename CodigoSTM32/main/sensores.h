@@ -22,9 +22,10 @@
 int frecuenciaRojo = 0;
 int frecuenciaVerde = 0;
 int frecuenciaAzul = 0;
-int colorRojo;
-int colorVerde;
-int colorAzul;
+int colorRojo = 0;
+int colorVerde = 0;
+int colorAzul = 0;
+int promedio = 5000;
 
 void setup_sensores() {
   // Definiendo las Salidas
@@ -48,74 +49,83 @@ SALIDAS: Color (1-Rojo; 2-Verde; 3-Azul) (int)
 //void leerColores(unsigned int *rgb)   // usar est
 int leerColores()
 {
-  // Definiendo la lectura de los fotodiodos con filtro rojo
-  digitalWrite(sensorColor_S2,LOW);
-  digitalWrite(sensorColor_S3,LOW);
-  
-  // Leyendo la frecuencia de salida del sensor
-  frecuenciaRojo = pulseIn(sensorColor_salida, LOW);
+  for(int contador = 0; contador <= promedio-1; contador++) {
+    // Definiendo la lectura de los fotodiodos con filtro rojo
+    digitalWrite(sensorColor_S2,LOW);
+    digitalWrite(sensorColor_S3,LOW);
+    
+    // Leyendo la frecuencia de salida del sensor
+    frecuenciaRojo = pulseIn(sensorColor_salida, LOW);
 
-  // Mapeando el valor de la frecuencia del ROJO (RED = R) de 0 a 255
-  // Se deben colocar los valores de calibración en los primeros dos números
-  colorRojo = map(frecuenciaRojo, 7, 68, 255,0);
-  
-  // Mostrando por el monitor Serial el valor para el rojo (R = Red)
-  //Serial.print("R = ");
-  //Serial.print(frecuenciaRojo);
-  //delay(100);
-  
-  // Definiendo la lectura de los fotodiodos con filtro verde
-  digitalWrite(sensorColor_S2,HIGH);
-  digitalWrite(sensorColor_S3,HIGH);
-  
-  // Leyendo la frecuencia de salida del sensor
-  frecuenciaVerde = pulseIn(sensorColor_salida, LOW);
-  
-  // Mapeando el valor de la frecuencia del VERDE (GREEN = G) de 0 a 255
-  // Se deben colocar los valores de calibración en los primeros dos números
-  colorVerde = map(frecuenciaVerde, 12, 64, 255,0);
+    // Sumo las frecuencias para sacar promedio luego
+    colorRojo = colorRojo + frecuenciaRojo;
 
-  // Mostrando por el monitor Serial el valor para el verde (G = Green)
-  //Serial.print(" G = ");
-  //Serial.print(frecuenciaVerde);
-  //delay(100);
- 
-  // Definiendo la lectura de los fotodiodos con filtro azul
-  digitalWrite(sensorColor_S2,LOW);
-  digitalWrite(sensorColor_S3,HIGH);
-  
-  // Leyendo la frecuencia de salida del sensor
-  frecuenciaAzul = pulseIn(sensorColor_salida, LOW);
+    // Mostrando por el monitor Serial el valor para el rojo (R = Red)
+    //Serial.print("R = ");
+    //Serial.print(frecuenciaRojo);
+    
+    // Definiendo la lectura de los fotodiodos con filtro verde
+    digitalWrite(sensorColor_S2,HIGH);
+    digitalWrite(sensorColor_S3,HIGH);
+    
+    // Leyendo la frecuencia de salida del sensor
+    frecuenciaVerde = pulseIn(sensorColor_salida, LOW);
 
-  // Mapeando el valor de la frecuencia del AZUL (AZUL = B) de 0 a 255
-  // Se deben colocar los valores de calibración en los primeros dos números
-  colorAzul = map(frecuenciaAzul, 10, 53, 255, 0);
-  
-  // Mostrando por el monitor Serial el valor para el azul (B = Blue)
-  //Serial.print(" B = ");
-  //Serial.println(frecuenciaAzul);
-  //delay(100);
+    colorVerde = colorVerde + frecuenciaVerde;
 
-  // Comprobar cual es el color detectado y mostrarlo
-  // esta parte del código realmente va en la RASP
+    // Mostrando por el monitor Serial el valor para el verde (G = Green)
+    //Serial.print(" G = ");
+    //Serial.print(frecuenciaVerde);
   
-  if(colorRojo > colorVerde && colorRojo > colorAzul){        // Color rojo
-    return 1;
+    // Definiendo la lectura de los fotodiodos con filtro azul
+    digitalWrite(sensorColor_S2,LOW);
+    digitalWrite(sensorColor_S3,HIGH);
+    
+    // Leyendo la frecuencia de salida del sensor
+    frecuenciaAzul = pulseIn(sensorColor_salida, LOW);
+
+    colorAzul = colorAzul + frecuenciaAzul;
+    
+    // Mostrando por el monitor Serial el valor para el azul (B = Blue)
+    //Serial.print(" B = ");
+    //Serial.println(frecuenciaAzul);
   }
-  else if(colorVerde > colorRojo && colorVerde > colorAzul){  // Color verde
-    return 3;
-  }
-  else if(colorAzul > colorRojo && colorAzul > colorVerde){   // Color azul
-    return 2;
-  }
-  else {                                                      // Espacio vacío
+
+  colorRojo = colorRojo/promedio;
+  colorVerde = colorVerde/promedio;
+  colorAzul = colorAzul/promedio;
+
+  // Serial.print(" R = ");
+  // Serial.print(colorRojo);
+  // Serial.print(" G = ");
+  // Serial.print(colorVerde);
+  // Serial.print(" B = ");
+  // Serial.println(colorAzul);
+
+  Serial.print("Color: ");
+  if(colorVerde < 6 && colorRojo < 6 && colorAzul < 6){        // Color blanco                                                   // Espacio vacío
     return 4;
   }
+  else if(colorRojo < colorVerde && colorRojo < colorAzul){    // Color rojo
+    return 1;
+  }
+  else if(colorAzul < colorRojo && colorAzul < colorVerde){    // Color azul
+    return 2;
+  }
+  else {                                                       // Color verde
+    return 3;
+  }
+
+  colorRojo = 0;
+  colorVerde = 0;
+  colorAzul = 0;
+
+  //delay(5000);
 }
 
 bool alarmaDistancia()
 {
-  if (HCSR04.measureDistanceCm()[0] < 20){
+  if (HCSR04.measureDistanceCm()[0] > 2.3){
     return 1;
   }
   else{
