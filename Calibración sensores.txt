@@ -1,0 +1,8 @@
+Color: 	(R,G,B) +- 2
+Rojo: 	(6,14,10)
+Verde:	(14,12,12) 
+Azul: 	(18,15,8)
+Blanco:	(4, 4, 4) 
+
+Distancia sin nada: 2.09 +- 0.1
+La alarma se debe activar si distancia > 2.3
