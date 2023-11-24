@@ -2,6 +2,9 @@
 #include "sensores.h"
 #include "actuadores.h"
 
+// PIN DE INTERRUPCIÓN QUE VIENE DE LA RASPBERRY PI
+#define pinInterruptor PA8    // Cambiar cuando se tenga el pin soldado
+
 bool DireccionX;
 uint8_t NivelesX;
 bool DireccionY;
@@ -17,7 +20,8 @@ void setup() {
 
   CalibrarCero();
 
-  
+  pinMode(pinInterruptor, INPUT);
+  attachInterrupt(digitalPinToInterrupt(pinInterruptor), pararTodo, RISING);
 
   setup_sensores();
 }
@@ -103,4 +107,10 @@ void SegmentarInformacion(){             // x xx x xx
   NivelesX = (datoMover >> 3) & 0x03; //2-3
   DireccionY = (datoMover >> 2) & 0x01; //4
   NivelesY = datoMover & 0x03; //5-6
+}
+
+void pararTodo() {
+  while (true) {
+    int i = 0;
+  }
 }
